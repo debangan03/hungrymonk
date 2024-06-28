@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  background-color: #FFF9EA;
+  overflow-x: hidden;
+  
+}
+.noscroll{
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
