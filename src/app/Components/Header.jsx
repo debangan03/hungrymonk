@@ -9,7 +9,8 @@ import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-function Header() {
+function Header({name}) {
+  console.log(name)
   const router = useRouter();
   const [isSticky, setIsSticky] = useState(false);
 
@@ -37,11 +38,12 @@ function Header() {
         className="absolute top-0 left-0"
       />
       <div className="flex justify-between items-center p-6">
-        <img
+        {/* <img
           src="https://www.baksish.in/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbaksish_logo.b18dc14f.png&w=96&q=75" // Replace with actual logo URL
           alt="BakSish"
           className="mb-4"
-        />
+        /> */}
+        <span className="text-2xl">{name}</span>
         <MenuIcon />
       </div>
       <div className={`search px-10 relative`}>

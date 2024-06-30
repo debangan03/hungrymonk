@@ -2,7 +2,9 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import success from '../assets/success.png'
+import success from "../assets/success.png";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 function SuccessPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -11,21 +13,29 @@ function SuccessPage() {
 
   useEffect(() => {
     try {
-      const items = JSON.parse(searchParams.get("items"));
-      const subTotal = searchParams.get("subTotal");
-      const gst = searchParams.get("gst");
-      const grandTotal = searchParams.get("grandTotal");
+      //const items = JSON.parse(searchParams.get("items"));
 
-      if (items && subTotal && gst && grandTotal) {
-        setOrderDetails({ items, subTotal, gst, grandTotal });
-      } else {
-        router.push("/"); // Redirect to home if there's no order info
-      }
+      //const gst = searchParams.get("gst");
+      //const grandTotal = searchParams.get("grandTotal");
+      const getorder = async () => {
+        const orderId = searchParams.get("orderId");
+        const res = await axios.post("/api/fetchspecificorder", {
+          orderId: orderId,
+        });
+        console.log(res.data.data);
+        setOrderDetails(res.data.data);
+        if(!res.data.success){
+          toast.error("Failed to place your order. Please place your order in-person to the waiter")
+          router.push("/"); // Redirect to home if there's no order info
+        }
+      };
+      getorder();
+      
     } catch (error) {
       console.error("Failed to parse order details:", error);
       router.push("/"); // Redirect to home if there's an error
     }
-  }, [searchParams, router]);
+  }, []);
 
   if (!orderDetails) {
     return <div>Loading...</div>;
@@ -33,34 +43,47 @@ function SuccessPage() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-[#FFF9EA] px-4">
-      <Image height={100} width={100}  alt="success"   src={success}/>
-      <h1 className="text-4xl font-bold text-[#661268] mb-4">Order Successful!</h1>
-      <p className="text-lg text-[#4E0433] mb-2">Thank you for your purchase.</p>
+      <Toaster/>
+      <Image height={100} width={100} alt="success" src={success} />
+      <h1 className="text-4xl font-bold text-[#661268] mb-4">
+        Order Successful!
+      </h1>
+      <p className="text-lg text-[#4E0433] mb-4">
+        Your order will be served soon!
+      </p>
 
       <div className="mx-auto bg-white w-full shadow-lg rounded-lg p-4">
         <div className="mb-4">
-          <h2 className="text-xl font-semibold text-gray-700">Order Details:</h2>
+          <h2 className="text-xl font-semibold text-gray-700">
+            Order Details:
+          </h2>
           <ul className="list-disc list-inside">
-            {orderDetails.items.map((item, i) => (
-              <li key={i} className="text-gray-700">
-                {item.name} - ₹ {item.price} x {item.quantity}
-              </li>
+            {orderDetails[0]?.order_items.map((item, i) => (
+              <div key={i}>
+                {item.items.map((item1, j) => (
+                  <li key={j} className="text-gray-700">
+                    {item1.name} - ₹ {item1.price} x {item1.quantity}
+                  </li>
+                ))}
+              </div>
             ))}
           </ul>
         </div>
 
         <div className="flex justify-between mb-2">
           <span className="font-semibold text-gray-700">Sub Total</span>
-          <span className="text-gray-700">₹ {orderDetails.subTotal}</span>
+          <span className="text-gray-700">₹ {orderDetails[0]?.initial_bill}</span>
         </div>
         <div className="flex justify-between mb-2">
-          <span className="font-semibold text-gray-700">GST</span>
-          <span className="text-gray-700">₹ {orderDetails.gst}</span>
+          <span className="font-semibold text-gray-700">GST (18%)</span>
+          <span className="text-gray-700">₹ {orderDetails[0]?.tax}</span>
         </div>
         <div className="border-t border-gray-300 my-2"></div>
         <div className="flex justify-between mt-2">
           <span className="font-bold text-gray-700">Grand Total</span>
-          <span className="font-bold text-gray-700">₹ {orderDetails.grandTotal}</span>
+          <span className="font-bold text-gray-700">
+            ₹ {orderDetails[0]?.total_bill}
+          </span>
         </div>
       </div>
 

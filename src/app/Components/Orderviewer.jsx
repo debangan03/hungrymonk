@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeItem, updateQuantity, hydrate } from "../redux/CartSlice";
 import Link from "next/link";
 
-function Orderviewer() {
+function Orderviewer({id,table}) {
   const cart = useSelector((state) => state?.cart);
   const dispatch = useDispatch();
   const [isHydrated, setIsHydrated] = useState(false);
@@ -42,7 +42,7 @@ function Orderviewer() {
           <h2 className="text-[#6C0345] font-bold text-xl mt-2">
             {cart?.totalQuantity} item added <EastIcon />
           </h2>
-          <Link href={'/ConfirmOrder'} className="px-6 py-2 mt-2 bg-white border-2 rounded-md text-[#6C0345] border-[#6C0345]">
+          <Link href={`/ConfirmOrder?id=${id}&table=${table}`} className="px-6 py-2 mt-2 bg-white border-2 rounded-md text-[#6C0345] border-[#6C0345]">
             Review order
           </Link>
         </div>

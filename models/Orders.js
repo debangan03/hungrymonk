@@ -15,6 +15,12 @@ const orders = new mongoose.Schema({
         type: String,
     },
     order_items: [singleOrders],
+    initial_bill: {
+        type: String,
+    },
+    tax: {
+        type: String,
+    },
     total_bill: {
         type: String,
     },
