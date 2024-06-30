@@ -24,7 +24,7 @@ function Page() {
     localStorage.setItem("customerId", customerId); // Store customer ID in local storage
 
     const orderDetails = {
-      customerId, // Include customer ID in the order details
+      customer_id, // Include customer ID in the order details
       items: JSON.stringify(cart.items),
       subTotal: cart.totalPrice.toFixed(2),
       gst: (cart.totalPrice * 0.18).toFixed(2),
