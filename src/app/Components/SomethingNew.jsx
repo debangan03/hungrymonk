@@ -5,7 +5,7 @@ import Heading from './Heading'
 function SomethingNew() {
     return (
         <>
-          <Heading heading={'What Your Mood'}/>
+          <Heading heading={"What's New"}/>
           <div className='px-4 -mt-2'>
             <section className="flex noscroll overflow-x-auto space-x-4 p-4">
               <SmallViewItem/>

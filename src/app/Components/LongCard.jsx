@@ -1,22 +1,61 @@
+"use client"
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem, removeItem, updateQuantity } from "../redux/CartSlice";
+import toast, { Toaster } from 'react-hot-toast';
 
-function LongCard({item}) {
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+
+function LongCard({ item }) {
+  const cart = useSelector((state) => state?.cart);
+  const dispatch = useDispatch();
+//console.log(cart);
+  const handleAddItem = () => {
+    dispatch(addItem({ _id: item._id, name: item.name, price: item.price, quantity: 1 }));
+  };
+
+  const handleRemoveItem = () => {
+    dispatch(removeItem({ _id: item._id }));
+  };
+
+  const handleUpdateQuantity = (quantity) => {
+    if (quantity < 0) {
+      dispatch(updateQuantity({ _id: item._id, quantity: 0 }));
+    } else if (quantity > 50) {
+      toast.error("Quantity cannot be more than 50");
+    } else {
+      dispatch(updateQuantity({ _id: item._id, quantity }));
+    }
+  };
+
+  const cartItem = cart.items.find(cartItem => cartItem._id === item._id);
+  //console.log(cartItem);
+
   return (
-  
-      <div className="flex items-center space-x-12 p-2 bg-transparent border-b-2 border-dotted border-[#966729]  ">
-        <div className="flex-grow w-3/5">
-          <h2 className="text-base font-semibold text-[#2f2f2f]">{item?.name}</h2>
-          <p className="">₹ {item?.price}</p>
-          <p className="text-[9px] text-[#565556]">{item.description}</p>
-        </div>
-        <div className="w-2/5 flex justify-end relative">
-        <img className="h-24 w-40   -z-10 shadow-md" src="https://t3.ftcdn.net/jpg/05/66/68/36/360_F_566683667_BeBecGFABNQYkZhquqJxhSj7UOcCY7ZJ.jpg" alt="item" />
-        <button className="absolute  rounded-lg px-[6px] py-[1px] -bottom-2 lg:right-24 lg:left-[60%] -left-8 bg-[#FFF9EA] text-[#966729] border-[#966729] border-2 hover:scale-90 duration-200 font-semibold mb-2">ADD <sup>+</sup></button>
-            
-        </div>
-       
+    <div className="flex items-center space-x-12 p-2 bg-transparent space-y-2">
+      <div className="flex-grow w-2/5">
+        <h2 className="text-lg font-semibold text-[#2f2f2f]">{item?.name}</h2>
+        <p>₹ {item?.price}{cartItem?.quantity && <span> X {cartItem?.quantity} </span>}</p>
+        <p className="text-[9px] text-start text-[#565556]">{item.description}</p>
       </div>
-    
+      <div className="w-2/5 flex justify-end relative">
+        <img className="h-24 w-40 -z-10 shadow-md" src="https://t3.ftcdn.net/jpg/05/66/68/36/360_F_566683667_BeBecGFABNQYkZhquqJxhSj7UOcCY7ZJ.jpg" alt="item" />
+        <div className="absolute rounded-lg px-2 py-[2px] -bottom-2 lg:right-24 lg:left-[60%] -left-4 bg-[#FFF9EA] text-[#966729] border-[#966729] border-2 hover:scale-90 duration-200 font-semibold mb-2 flex items-center space-x-2 text-2xl">
+          {cartItem?.quantity >0 ? (
+            <div className="flex justify-center text-center w-full items-center space-x-2 ">
+              <span  onClick={() => handleUpdateQuantity(cartItem.quantity - 1)} className="cursor-pointer"><RemoveIcon/></span>
+              <span className="text-base">{cartItem.quantity}</span>
+              <span onClick={() => handleUpdateQuantity(cartItem.quantity + 1)} className="cursor-pointer"><AddIcon/></span>
+              
+            </div>
+          ) : (
+            <span onClick={handleAddItem} className="cursor-pointer text-xl w-full text-center">Add</span>
+          )}
+        </div>
+      </div>
+      <Toaster />
+    </div>
   );
 }
 

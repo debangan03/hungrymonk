@@ -7,8 +7,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function Header() {
+  const router = useRouter();
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
@@ -28,23 +30,26 @@ function Header() {
   }, []);
 
   return (
-    <div className="h-[280px] rounded-b-[2rem] relative w-screen bg-gradient-to-b from-[#FFF9EA] mix-blend-multiply to-[#F5EC02]/30">
-      <Image alt="bgbanner" src={maskvector} className="absolute top-0 left-0" />
+    <div className="h-[280px] relative w-screen bg-gradient-to-b from-[#FFF9EA] mix-blend-multiply to-[#F5EC02]/30">
+      <Image
+        alt="bgbanner"
+        src={maskvector}
+        className="absolute top-0 left-0"
+      />
       <div className="flex justify-between items-center p-6">
-      <img
+        <img
           src="https://www.baksish.in/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fbaksish_logo.b18dc14f.png&w=96&q=75" // Replace with actual logo URL
           alt="BakSish"
           className="mb-4"
         />
         <MenuIcon />
       </div>
-      <div
-        className={`search px-10 relative`}
-      >
-        <input
-          type="text"
-          placeholder="Search 'Butter nan'"
-          className="pr-8 pl-10 py-3 focus:ring-0 shadow-md bg-[#FFF9EA] w-full rounded-full"
+      <div className={`search px-10 relative`}>
+        <div
+          onClick={() => {
+            router.push("/SearchItems");
+          }}
+          className="pr-8 pl-10 h-10 focus:ring-0 shadow-md bg-[#FFF9EA] w-full rounded-full"
         />
         <SearchIcon className="absolute top-3 text-[#4E0433] h-6 left-12" />
       </div>
@@ -59,10 +64,13 @@ function Header() {
         </p>
       </div>
       <div className="flex justify-center items-center mt-4">
-        <Link href={'/TippPage'} className="bg-[#6C0345] rounded-full py-1 px-4 text-[#FFF9EA] flex justify-center items-center hover:scale-90 duration-700">
+        <Link
+          href={"/TippPage"}
+          className="bg-[#6C0345] rounded-full py-1 px-4 text-[#FFF9EA] flex justify-center items-center hover:scale-90 duration-700"
+        >
           Treat the team
           <ArrowRightAltIcon />
-        </Link >
+        </Link>
       </div>
     </div>
   );

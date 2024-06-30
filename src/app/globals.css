@@ -11,3 +11,22 @@ body{
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;
 }
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #FFF9EA;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #edb061;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #e3b67c;
+}
