@@ -30,8 +30,7 @@ function FetchAllData() {
     return item.value;
   }
   useEffect(() => {
-    //setorderId(getLocalStorage("orderId"));
-    //console.log(getLocalStorage("orderId"));
+    
     const restaurant_id = searchParams.get("id");
     settable_number(searchParams.get("table"));
     const getmenu = async () => {
@@ -39,7 +38,7 @@ function FetchAllData() {
         restaurant_id,
       });
       setmenuitems(res.data.data);
-      console.log(res.data.data);
+      
     };
     getmenu();
     

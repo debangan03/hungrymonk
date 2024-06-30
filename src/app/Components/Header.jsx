@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 function Header({name}) {
-  console.log(name)
+ 
   const router = useRouter();
   const [isSticky, setIsSticky] = useState(false);
 

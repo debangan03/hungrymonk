@@ -20,17 +20,43 @@ function Page() {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  function setLocalStorage(key, value, hours) {
+    const now = new Date();
+    const item = {
+      value: value,
+      expiry: now.getTime() + hours * 60 * 60 * 1000,
+    };
+    localStorage.setItem(key, JSON.stringify(item));
+  }
+  function getLocalStorage(key) {
+    const itemStr = localStorage.getItem(key);
+    if (!itemStr) {
+      return null;
+    }
+    const item = JSON.parse(itemStr);
+    const now = new Date();
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return item.value;
+  }
+
+  const savedcustomerid= localStorage.getItem("customerId");
+  const savedorderid = getLocalStorage('orderId');
+
   useEffect(() => {
     setrestaurant_id(searchParams.get("id"));
     settable_number(searchParams.get("table"));
     setIsHydrated(true);
   }, []);
-
+  
   const handleplaceorder = async() => {
-    const customerId = ("CUS_" + uuidv4()).toString();
+    const customerId = savedcustomerid==null ||savedcustomerid==""?("CUS_" + uuidv4()).toString():savedcustomerid;
+    if(savedorderid==null || savedorderid=="") {
     const orderId = ("ORD_" + uuidv4()).toString(); // Replace this with the actual customer ID logic if needed
     localStorage.setItem("customerId", customerId); // Store customer ID in local storage
-    localStorage.setItem("orderId", orderId);
+    setLocalStorage("orderId", orderId,4);
     const orderDetails = {
       customer_id: customerId, // Include customer ID in the order details
       order_id: orderId,
@@ -51,12 +77,38 @@ function Page() {
       total_bill: (cart.totalPrice * 1.18).toFixed(2),
     };
     const res = await axios.post('api/createneworder', orderDetails);
-    console.log(res);
+    
     // Redirect to the success page with order details
     if(res.data.success){
       dispatch(clearCart());
-      router.push(`/OrderSuccess?orderId=${orderId}`);
+      router.push(`/OrderSuccess?id=${restaurant_id}&table=${table_number}&orderId=${orderId}`);
     }
+  }
+  else{
+    const orderId = savedorderid; // Replace this with the actual customer ID logic if needed
+    const orderDetails = {
+      order_id: orderId,
+      new_order_items:
+        {
+          items: cart.items,
+          notes:notes,
+          item_total: cart.totalPrice.toFixed(2),
+          charges: (cart.totalPrice * 0.18).toFixed(2),
+          total_price: (cart.totalPrice * 1.18).toFixed(2),
+          status:"Ordered"
+        },
+      new_initial_bill:cart.totalPrice.toFixed(2),
+      // tax:(cart.totalPrice * 0.18).toFixed(2),
+      // total_bill: (cart.totalPrice * 1.18).toFixed(2),
+    };
+    const res = await axios.post('api/updateexistingorder', orderDetails);
+    
+    // Redirect to the success page with order details
+    if(res.data.success){
+      dispatch(clearCart());
+      router.push(`/OrderSuccess?id=${restaurant_id}&table=${table_number}&orderId=${orderId}`);
+    }
+  }
     
   };
 
@@ -75,7 +127,7 @@ function Page() {
             </p>
           </div>
           <Link
-            href={"/"}
+            href={`/?id=${restaurant_id}&table=${table_number}`}
             className="px-4 font-bold py-2 tracking-widest bg-white border-2 rounded-md text-[#6C0345] border-[#6C0345]"
           >
             EDIT

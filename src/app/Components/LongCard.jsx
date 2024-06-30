@@ -10,7 +10,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 function LongCard({ item }) {
   const cart = useSelector((state) => state?.cart);
   const dispatch = useDispatch();
-//console.log(cart);
+
   const handleAddItem = () => {
     dispatch(addItem({ _id: item._id, name: item.name, price: item.price, quantity: 1 }));
   };
@@ -30,7 +30,7 @@ function LongCard({ item }) {
   };
 
   const cartItem = cart.items.find(cartItem => cartItem._id === item._id);
-  //console.log(cartItem);
+  
 
   return (
     <div className="flex items-center space-x-12 p-2 bg-transparent space-y-2">

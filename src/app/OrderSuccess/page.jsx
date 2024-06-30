@@ -8,7 +8,8 @@ import toast, { Toaster } from "react-hot-toast";
 function SuccessPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
+  const [restaurant_id, setrestaurant_id] = useState("")
+  const [table_number, settable_number] = useState("")
   const [orderDetails, setOrderDetails] = useState(null);
 
   useEffect(() => {
@@ -17,23 +18,26 @@ function SuccessPage() {
 
       //const gst = searchParams.get("gst");
       //const grandTotal = searchParams.get("grandTotal");
+      setrestaurant_id(searchParams.get("id"));
+      settable_number(searchParams.get("table"));
       const getorder = async () => {
         const orderId = searchParams.get("orderId");
+        
         const res = await axios.post("/api/fetchspecificorder", {
           orderId: orderId,
         });
-        console.log(res.data.data);
+        
         setOrderDetails(res.data.data);
         if(!res.data.success){
           toast.error("Failed to place your order. Please place your order in-person to the waiter")
-          router.push("/"); // Redirect to home if there's no order info
+          router.push(`/?id=${restaurant_id}&table=${table_number}`); // Redirect to home if there's no order info
         }
       };
       getorder();
       
     } catch (error) {
       console.error("Failed to parse order details:", error);
-      router.push("/"); // Redirect to home if there's an error
+      router.push(`/?id=${restaurant_id}&table=${table_number}`); // Redirect to home if there's an error
     }
   }, []);
 
@@ -49,7 +53,7 @@ function SuccessPage() {
         Order Successful!
       </h1>
       <p className="text-lg text-[#4E0433] mb-4">
-        Your order will be served soon!
+        Happy food. Happy us!
       </p>
 
       <div className="mx-auto bg-white w-full shadow-lg rounded-lg p-4">
@@ -88,10 +92,10 @@ function SuccessPage() {
       </div>
 
       <button
-        onClick={() => router.push("/")}
+        onClick={() => router.push(`/?id=${restaurant_id}&table=${table_number}`)}
         className="mt-6 px-4 py-2 bg-[#661268] text-white rounded-md"
       >
-        Back to Home
+        Add more items
       </button>
     </div>
   );

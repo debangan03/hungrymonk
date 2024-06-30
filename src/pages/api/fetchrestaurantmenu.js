@@ -6,10 +6,10 @@ const handler=async(req,res)=>{
     if(req.method=="POST"){
         try{
         const {restaurant_id}=req.body;
-        console.log(req.body)
-        console.log(restaurant_id);
+        
+        
         const menu=await RestaurantItems.findOne({restaurant_id});
-        console.log(menu)
+        
         res.status(200).json({success:true,data:menu});
     }
         catch(e){
