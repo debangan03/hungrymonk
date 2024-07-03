@@ -21,6 +21,9 @@ const orders = new mongoose.Schema({
     tax: {
         type: String,
     },
+    discount:{
+        type:String,
+    },
     total_bill: {
         type: String,
     },

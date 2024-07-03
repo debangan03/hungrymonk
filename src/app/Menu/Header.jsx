@@ -9,8 +9,8 @@ import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-function Header({name}) {
- 
+function Header({name,restaurant_id,table_number}) {
+
   const router = useRouter();
   const [isSticky, setIsSticky] = useState(false);
 
@@ -31,7 +31,7 @@ function Header({name}) {
   }, []);
 
   return (
-    <div className="h-[280px] relative w-screen bg-gradient-to-b from-[#FFF9EA] mix-blend-multiply to-[#F5EC02]/30">
+    <div className="h-[250px] relative w-screen bg-gradient-to-b from-[#FFF9EA] mix-blend-multiply to-[#F5EC02]/30">
       <Image
         alt="bgbanner"
         src={maskvector}
@@ -44,16 +44,19 @@ function Header({name}) {
           className="mb-4"
         /> */}
         <span className="text-2xl">{name}</span>
-        <MenuIcon />
+        <Link href={`/MyOrder?id=${restaurant_id}&table=${table_number}&name=${name}`} className="rounded-full border bg-[] shadow-sm shadow-[#6C0345] border-[#6C0345] text-sm py-1 px-2">My Order</Link>
       </div>
+     
       <div className={`search px-10 relative`}>
         <div
           onClick={() => {
-            router.push("/SearchItems");
+            router.push(`/SearchItems?id=${restaurant_id}&name=${name}&table=${table_number}`);
           }}
           className="pr-8 pl-10 h-10 focus:ring-0 shadow-md bg-[#FFF9EA] w-full rounded-full"
-        />
+        >
         <SearchIcon className="absolute top-3 text-[#4E0433] h-6 left-12" />
+        <span className="absolute top-[0.7rem] text-gray-400">Type "Butter nan"</span>
+        </div>
       </div>
       <div className="mt-8 h-8 relative">
         <Image
@@ -65,12 +68,13 @@ function Header({name}) {
           Now you can review and rate our service !!
         </p>
       </div>
-      <div className="flex justify-center items-center mt-4">
+      <div className="flex relative justify-center items-center mt-4">
         <Link
           href={"/TippPage"}
           className="bg-[#6C0345] rounded-full py-1 px-4 text-[#FFF9EA] flex justify-center items-center hover:scale-90 duration-700"
         >
           Treat the team
+          
           <ArrowRightAltIcon />
         </Link>
       </div>

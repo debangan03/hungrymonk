@@ -9,6 +9,7 @@ import BestSeller from "./BestSeller";
 import DisplayCategorywisemenu from "./DisplayCategorywisemenu";
 import Orderviewer from "./Orderviewer";
 import Footer from "./Footer";
+import Pageloader from "../loaders/pageloader";
 
 function FetchAllData() {
   const [menuitems, setmenuitems] = useState();
@@ -16,46 +17,44 @@ function FetchAllData() {
   const searchParams = useSearchParams();
   const [orderId, setorderId] = useState("");
 
-  function getLocalStorage(key) {
-    const itemStr = localStorage.getItem(key);
-    if (!itemStr) {
-      return null;
-    }
-    const item = JSON.parse(itemStr);
-    const now = new Date();
-    if (now.getTime() > item.expiry) {
-      localStorage.removeItem(key);
-      return null;
-    }
-    return item.value;
-  }
   useEffect(() => {
-    
     const restaurant_id = searchParams.get("id");
     settable_number(searchParams.get("table"));
     const getmenu = async () => {
       const res = await axios.post("/api/fetchrestaurantmenu", {
         restaurant_id,
       });
+     //console.log(res.data.data);
       setmenuitems(res.data.data);
-      
     };
     getmenu();
-    
   }, []);
+  if (!menuitems)
+    return (
+      <>
+        <Pageloader />
+      </>
+    );
 
   return (
     <div>
-      {menuitems && (
-        <div className="min-h-screen">
-          <Header name={menuitems.restaurant_name} />
-          {/* <What_your_mood /> */}
-          <SomethingNew />
-          {/* <BestSeller /> */}
-          <DisplayCategorywisemenu menu={menuitems.food_items} />
-          <Orderviewer id={menuitems.restaurant_id} table={table_number} />
-        </div>
-      )}
+      
+      {menuitems&&<div className="min-h-screen">
+        <Header
+          name={menuitems.restaurant_name}
+          restaurant_id={menuitems.restaurant_id}
+          table_number={table_number}
+        />
+        {/* <What_your_mood /> */}
+        <SomethingNew />
+        {/* <BestSeller /> */}
+        <DisplayCategorywisemenu menu={menuitems.food_items} />
+        <Orderviewer
+          id={menuitems.restaurant_id}
+          table={table_number}
+        />
+        
+      </div>}
       <Footer />
     </div>
   );

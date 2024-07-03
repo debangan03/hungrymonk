@@ -30,3 +30,11 @@ body{
 ::-webkit-scrollbar-thumb:hover {
   background: #e3b67c;
 }
+/* styles/globals.css */
+
+
+.centered-axis-x {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}

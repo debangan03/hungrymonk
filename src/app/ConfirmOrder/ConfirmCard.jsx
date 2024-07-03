@@ -16,7 +16,7 @@ function ConfirmCard({item}) {
           </div>
           <div className="flex justify-between items-center mt-2 ">
             <p className="bg-transparent border-2 border-[#dcbb69] p-1 text-sm rounded-lg">
-              qty : <span className="font-bold">{item?.quantity}</span>
+              Quantity : <span className="font-bold">{item?.quantity}</span>
             </p>
             <p>₹ {item?.price * item?.quantity}</p>
           </div>

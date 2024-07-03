@@ -1,6 +1,6 @@
 // components/TreatOurTeam.js
 import React from "react";
-import Heading from "../Components/Heading";
+import Heading from "../Menu/Heading";
 import ProfileCard from "./ProfileCard";
 
 function TreatOurTeam() {

@@ -13,6 +13,7 @@ function Orderviewer({id,table}) {
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
+    if(typeof window !== 'undefined'){
     const items = JSON.parse(localStorage.getItem('cartItems')) || [];
     const totalQuantity = JSON.parse(localStorage.getItem('totalQuantity')) || 0;
     const totalPrice = JSON.parse(localStorage.getItem('totalPrice')) || 0;
@@ -21,7 +22,8 @@ function Orderviewer({id,table}) {
     if (items.length > 0 || totalQuantity > 0 || totalPrice > 0) {
       dispatch(hydrate({ items, totalQuantity, totalPrice }));
     }
-    setIsHydrated(true); // Mark as hydrated after initial load
+    setIsHydrated(true);
+   } // Mark as hydrated after initial load
   }, [dispatch]);
 
   if (!isHydrated || cart.totalQuantity === 0) {
@@ -36,6 +38,7 @@ function Orderviewer({id,table}) {
             src={goldbg}
             alt="bg"
             width={10000}
+            priority
             className="-z-10 absolute top-0 left-0"
             height={1000}
           />

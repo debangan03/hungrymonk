@@ -1,5 +1,5 @@
 import React from 'react'
-import Heading from '../Components/Heading'
+import Heading from '../Menu/Heading'
 
 function ProfileCard({member}) {
   return (

@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react'
-import SuccessPage from './Order'
 import Pageloader from '../loaders/pageloader'
+import Order from './Order'
 
 function page() {
   return (
     <div><Suspense fallback={<div><Pageloader/></div>}>
-        <SuccessPage/>
+        <Order/>
         </Suspense>
     </div>
   )

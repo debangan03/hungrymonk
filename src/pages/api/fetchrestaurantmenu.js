@@ -7,9 +7,7 @@ const handler=async(req,res)=>{
         try{
         const {restaurant_id}=req.body;
         
-        
         const menu=await RestaurantItems.findOne({restaurant_id});
-        
         res.status(200).json({success:true,data:menu});
     }
         catch(e){

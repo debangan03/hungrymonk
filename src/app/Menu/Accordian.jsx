@@ -17,4 +17,3 @@ function Accordion({ id, title, isOpen, onToggle, children }) {
   }
   
   export default Accordion;
-  

@@ -8,73 +8,7 @@ import Image from "next/image";
 import vegicon from '../assets/veg.png'
 import nonvegicon from '../assets/nonveg.png'
 
-const food_items = [
-  {
-    name: 'Pizza',
-    description: 'It is hot. It is spicy. It is oh-so-Indian. Tandoori paneer with capsicum, red paprika & mint mayo',
-    quantity: '1',
-    price: '200',
-    category: 'bread',
-    subcategory: 'nonveg',
-    image: 'https://via.placeholder.com/100',
-    status: true,
-    _id: '667ed9d54f283d55f696772e',
-    createdAt: '2024-06-28T15:42:13.241Z',
-    updatedAt: '2024-06-28T15:42:13.241Z'
-  },
-  {
-    name: 'Pizza',
-    description: 'It is hot. It is spicy. It is oh-so-Indian. Tandoori paneer with capsicum, red paprika & mint mayo',
-    quantity: '1',
-    price: '200',
-    category: 'bread',
-    subcategory: 'veg',
-    image: 'https://via.placeholder.com/100',
-    status: true,
-    _id: '667ed9d54f2y83d55f696772e',
-    createdAt: '2024-06-28T15:42:13.241Z',
-    updatedAt: '2024-06-28T15:42:13.241Z'
-  },
-  {
-    name: 'Pizza',
-    description: 'It is hot. It is spicy. It is oh-so-Indian. Tandoori paneer with capsicum, red paprika & mint mayo',
-    quantity: '1',
-    price: '200',
-    category: 'bread',
-    subcategory: 'nonveg',
-    image: 'https://via.placeholder.com/100',
-    status: true,
-    _id: '667edrt9d54f283d55f696772e',
-    createdAt: '2024-06-28T15:42:13.241Z',
-    updatedAt: '2024-06-28T15:42:13.241Z'
-  },
-  {
-    name: 'Butter chicken(half)',
-    description: 'Nice',
-    quantity: '1',
-    price: '140',
-    category: 'maincourse',
-    subcategory: 'nonveg',
-    image: 'https://via.placeholder.com/100',
-    status: true,
-    _id: '667ed9d54f283d55f696772f',
-    createdAt: '2024-06-28T15:42:13.242Z',
-    updatedAt: '2024-06-28T15:42:13.242Z'
-  },
-  {
-    name: 'Roti',
-    description: 'Nice',
-    quantity: '1',
-    price: '10',
-    category: 'tandoor',
-    subcategory: 'veg',
-    image: 'https://via.placeholder.com/100',
-    status: true,
-    _id: '667ed9d54f283d55f6967730',
-    createdAt: '2024-06-28T15:42:13.242Z',
-    updatedAt: '2024-06-28T15:42:13.242Z'
-  }
-];
+
 
 function DisplayCategorywisemenu({menu}) {
   
