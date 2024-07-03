@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import Pageloader from "./loaders/Pageloader";
+import Pageloader from "./loaders/pageloader";
 import FetchAllData from "./Menu/FetchAllData";
 import Landing from "./LandingPage/Landing";
 
