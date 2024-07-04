@@ -1,8 +1,11 @@
 import React from 'react'
+import Orders from './Orders'
+import Footer from '../Menu/Footer'
 
 function page() {
   return (
-    <div>page</div>
+    <div><Orders/>
+    <Footer/></div>
   )
 }
 
