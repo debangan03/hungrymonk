@@ -95,12 +95,13 @@ function Bill() {
             <h2 className="text-xl font-semibold text-gray-700">
               Order Details:
             </h2>
+            <hr className="bg-black my-3"/>
             <ul className="list-disc list-inside">
               {orderDetails[0]?.order_items.map((item, i) => (
                 <div key={i}>
                   {item.items.map((item1, j) => (
-                    <li key={j} className="text-gray-700">
-                      {item1.name} - ₹ {item1.price} x {item1.quantity}
+                    <li key={j} className=" text-gray-700 flex justify-between border-b border-dotted border-gray-400 py-2">
+                      <span>{item1?.food?.name}</span><span>₹ {item1?.food?.price} x {item1?.quantity}</span>
                     </li>
                   ))}
                 </div>
@@ -108,7 +109,7 @@ function Bill() {
             </ul>
           </div>
 
-          <div className="flex justify-between mb-2">
+          <div className="flex justify-between mb-2 mt-6">
             <span className="font-semibold text-gray-700">Sub Total</span>
             <span className="text-gray-700">
               ₹ {orderDetails[0]?.initial_bill}

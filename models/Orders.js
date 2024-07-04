@@ -14,7 +14,8 @@ const orders = new mongoose.Schema({
     table_number:{
         type: String,
     },
-    order_items: [singleOrders],
+    order_items: [{type: mongoose.Schema.Types.ObjectId,
+        ref: 'SingleOrders'}],
     initial_bill: {
         type: String,
     },

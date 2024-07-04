@@ -1,16 +1,12 @@
 import mongoose from 'mongoose';
 
-export const fooditems = new mongoose.Schema({
+const foodItemsSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
     },
     description: {
         type: String,
-    },
-    quantity: {
-        type: String,
-        default:"1",
     },
     price: {
         type: String,
@@ -21,13 +17,13 @@ export const fooditems = new mongoose.Schema({
     subcategory: {
         type: String,
     },
-    image:{
-        type:String,
+    image: {
+        type: String,
     },
-    available_status:{
-        type:Boolean,
-        default:true,
+    available_status: {
+        type: Boolean,
+        default: true,
     }
-}, { timestamps: true })
+}, { timestamps: true });
 
-export default mongoose.models.FoodItems || mongoose.model("FoodItems", fooditems)
+export const FoodItems = mongoose.models.FoodItems || mongoose.model('FoodItems', foodItemsSchema);

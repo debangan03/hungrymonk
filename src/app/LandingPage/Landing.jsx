@@ -68,7 +68,7 @@ import Footer from "./Footer";
 
 import border from "../assets/Group_32.png";
 // import Image from "next/image";
-import cheif from "../assets/iconfood.png";
+import chef from "../assets/iconfood.png";
 import heading from "../assets/heading.png";
 const page = () => {
   const searchParams = useSearchParams();
@@ -76,7 +76,7 @@ const page = () => {
   const table_number = searchParams.get("table");
   return (
     <>
-      <div className="w-screen h-screen relative bg-gradient-to-bl overflow-hidden  from-[#430123] to-[#5A0132]">
+      <div className="w-screen min-h-screen  relative bg-gradient-to-bl overflow-hidden  from-[#430123] to-[#5A0132]">
         <Image
           src={border}
           className="  absolute  top-3 left-3 lg:hidden block   h-[93%] w-[94%] "
@@ -111,12 +111,16 @@ const page = () => {
         </div>
         <Image
           className="absolute z-10  bottom-6 w-[80%]  -right-2 lg:hidden block "
-          src={cheif}
+          src={chef}
           alt="bottomimg"
           width={1000}
           height={1000}
         />
+        <div className="flex items-center justify-center">
+        <div className="absolute text-white bottom-2">powered by Baksish</div>
+        </div>
       </div>
+      
     </>
   );
 };

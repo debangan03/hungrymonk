@@ -43,8 +43,8 @@ function Header({name,restaurant_id,table_number}) {
           alt="BakSish"
           className="mb-4"
         /> */}
-        <span className="text-2xl">{name}</span>
-        <Link href={`/MyOrder?id=${restaurant_id}&table=${table_number}&name=${name}`} className="rounded-full border bg-[] shadow-sm shadow-[#6C0345] border-[#6C0345] text-sm py-1 px-2">My Order</Link>
+        <span className="text-2xl border-b-2 border-b-[#4E0433]">{name}</span>
+        <Link href={`/MyOrder?id=${restaurant_id}&table=${table_number}&name=${name}`} className="rounded-full border shadow-inner   border-[#6C0345] text-sm py-1 px-2">My Order</Link>
       </div>
      
       <div className={`search px-10 relative`}>

@@ -40,6 +40,7 @@ function Order() {
               orderId: orderId,
             });
             setOrderDetails(res.data.data);
+            console.log(res.data.data);
             if (!res.data.success) {
               toast.error(
                 "Failed to fetch your order. Please ask in-person to the waiter"
@@ -73,12 +74,12 @@ function Order() {
 
   return (
     <><OrderHeader name={restaurant_name}/>
-      <div className="flex flex-col justify-center items-center bg-[#FFF9EA] px-4 mb-32 mt-10">
+      <div className="flex flex-col justify-center items-center bg-[#FFF9EA] px-4 mb-32 mt-4">
         <Toaster />
         
         <div className="text-lg flex mt-4 justify-center items-center space-x-4 text-[#661268] w-full">
           <div className="lg:w-40 w-16 h-[2px] bg-gradient-to-r from-transparent to-[#661268]"></div>
-          <p className="lg:text-lg text-[18px] uppercase tracking-widest">
+          <p className="lg:text-lg text-[15px] uppercase tracking-widest">
             Current order
           </p>
           <div className="lg:w-40 w-16 h-[2px] bg-gradient-to-r from-[#661268] to-transparent"></div>
@@ -86,17 +87,18 @@ function Order() {
 
         <p className="text-sm text-[#4E0433] mb-4">Happy food. Happy us!</p>
 
-        <div className="mx-auto bg-white w-full shadow-lg rounded-lg p-4">
+        <div className="mx-auto bg-white w-full shadow-lg rounded-lg p-4 mt-8">
           <div className="mb-4">
             <h2 className="text-xl font-semibold text-gray-700">
               Order Details:
             </h2>
+            <hr className="bg-black my-3"/>
             <ul className="list-disc list-inside">
               {orderDetails[0]?.order_items.map((item, i) => (
                 <div key={i}>
                   {item.items.map((item1, j) => (
-                    <li key={j} className="text-gray-700">
-                      {item1.name} - ₹ {item1.price} x {item1.quantity}
+                    <li key={j} className="text-gray-700 flex justify-between border-b border-dotted border-gray-400 py-2">
+                      <span>{item1?.food?.name}</span> <span>₹ {item1?.food?.price} x {item1?.quantity}</span>
                     </li>
                   ))}
                 </div>
@@ -104,7 +106,7 @@ function Order() {
             </ul>
           </div>
 
-          <div className="flex justify-between mb-2">
+          <div className="flex justify-between mb-2 mt-6">
             <span className="font-semibold text-gray-700">Sub Total</span>
             <span className="text-gray-700">
               ₹ {orderDetails[0]?.initial_bill}

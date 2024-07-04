@@ -16,12 +16,12 @@ const handler=async(req, res)=> {
             restaurant.food_items.push(newFoodItem._id);
             await restaurant.save();
 
-            res.status(201).json({ success: true, data: restaurant });
+            res.status(200).json({ success: true, data: restaurant });
         } catch (error) {
-            res.status(400).json({ success: false, error: error.message });
+            res.status(201).json({ success: false, error: error.message });
         }
     } else {
-        res.status(405).json({ success: false, message: 'Method not allowed' });
+        res.status(201).json({ success: false, message: 'Method not allowed' });
     }
 }
 export default conndb(handler);

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useRouter, useSearchParams } from "next/navigation";
 import { clearCart } from "../redux/CartSlice";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Pageloader from "../loaders/pageloader";
@@ -15,13 +15,13 @@ import Pageloader from "../loaders/pageloader";
 function ConfirmOrder() {
   const searchParams = useSearchParams();
   const cart = useSelector((state) => state?.cart);
+  console.log(cart);
   const [isHydrated, setIsHydrated] = useState(false);
-  const [restaurant_id, setrestaurant_id] = useState("");
-  const [table_number, settable_number] = useState("");
-  const [notes, setnotes] = useState("")
+  const [notes, setnotes] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const restaurant_id = searchParams.get("id");
+  const table_number = searchParams.get("table");
   function setLocalStorage(key, value, hours) {
     const now = new Date();
     const item = {
@@ -30,6 +30,12 @@ function ConfirmOrder() {
     };
     localStorage.setItem(key, JSON.stringify(item));
   }
+  useEffect(() => {
+    if (!cart || cart?.items?.length <= 0) {
+      toast.error("Cart is empty, please add items to proceed");
+        router.push(`/Menu?id=${restaurant_id}&table=${table_number}`);
+    }
+  }, []);
   function getLocalStorage(key) {
     const itemStr = localStorage.getItem(key);
     if (!itemStr) {
@@ -45,100 +51,112 @@ function ConfirmOrder() {
   }
   let savedcustomerid;
   let savedorderid;
-  if (typeof window !== 'undefined') {
-  savedcustomerid= localStorage.getItem("customerId");
-  savedorderid = getLocalStorage('orderId');
-  }
-  else
-  {
-    return(<div><Pageloader/></div>)
+  let savedrestaurantid;
+  if (typeof window !== "undefined") {
+    savedcustomerid = localStorage.getItem("customerId");
+    savedorderid = getLocalStorage("orderId");
+    savedrestaurantid=localStorage.getItem("restaurantId");
+  } else {
+    return (
+      <div>
+        <Pageloader />
+      </div>
+    );
   }
   useEffect(() => {
-    setrestaurant_id(searchParams.get("id"));
-    settable_number(searchParams.get("table"));
     setIsHydrated(true);
   }, []);
-  
-  const handleplaceorder = async() => {
-    const customerId = savedcustomerid==null ||savedcustomerid==""?("CUS_" + uuidv4()).toString():savedcustomerid;
-    if(savedorderid==null || savedorderid=="") {
-    const orderId = ("ORD_" + uuidv4()).toString(); // Replace this with the actual customer ID logic if needed
-    localStorage.setItem("customerId", customerId); // Store customer ID in local storage
-    setLocalStorage("orderId", orderId,4);
-    const orderDetails = {
-      customer_id: customerId, // Include customer ID in the order details
-      order_id: orderId,
-      restaurant_id: restaurant_id,
-      table_number: table_number,
-      order_items: [
-        {
+
+  const handleplaceorder = async () => {
+    if(savedrestaurantid!=restaurant_id){
+      localStorage.removeItem("restaurantid");
+      localStorage.removeItem("orderId");
+    }
+    const customerId =
+      savedcustomerid == null || savedcustomerid == ""
+        ? ("CUS_" + uuidv4()).toString()
+        : savedcustomerid;
+    if ((savedorderid == null && savedrestaurantid==null) || (savedorderid == "" && savedrestaurantid=="")) {
+      const orderId = ("ORD_" + uuidv4()).toString(); // Replace this with the actual customer ID logic if needed
+      localStorage.setItem("customerId", customerId); // Store customer ID in local storage
+      setLocalStorage("orderId", orderId, 4);
+      localStorage.setItem("restaurantId", restaurant_id);
+      const orderDetails = {
+        customer_id: customerId, // Include customer ID in the order details
+        order_id: orderId,
+        restaurant_id: restaurant_id,
+        table_number: table_number,
+        order_items: [
+          {
+            items: cart.items,
+            notes: notes,
+            item_total: cart.totalPrice.toFixed(2),
+            charges: (cart.totalPrice * 0.18).toFixed(2),
+            total_price: (cart.totalPrice * 1.18).toFixed(2),
+            status: "Ordered",
+          },
+        ],
+        initial_bill: cart.totalPrice.toFixed(2),
+        tax: (cart.totalPrice * 0.18).toFixed(2),
+        total_bill: (cart.totalPrice * 1.18).toFixed(2),
+      };
+      const res = await axios.post("api/createneworder", orderDetails);
+
+      // Redirect to the success page with order details
+      if (res.data.success) {
+        setTimeout(() => {
+          dispatch(clearCart());
+        }, 1000);
+
+        router.push(
+          `/OrderSuccess?id=${restaurant_id}&table=${table_number}&orderId=${orderId}`
+        );
+      } else {
+        localStorage.removeItem("restaurantid");
+        localStorage.removeItem("orderId");
+        toast.error(res.data.error);
+      }
+    } else {
+      const orderId = savedorderid; // Replace this with the actual customer ID logic if needed
+      const orderDetails = {
+        order_id: orderId,
+        new_order_items: {
           items: cart.items,
-          notes:notes,
+          notes: notes,
           item_total: cart.totalPrice.toFixed(2),
           charges: (cart.totalPrice * 0.18).toFixed(2),
           total_price: (cart.totalPrice * 1.18).toFixed(2),
-          status:"Ordered"
+          status: "Ordered",
         },
-      ],
-      initial_bill:cart.totalPrice.toFixed(2),
-      tax:(cart.totalPrice * 0.18).toFixed(2),
-      total_bill: (cart.totalPrice * 1.18).toFixed(2),
-    };
-    const res = await axios.post('api/createneworder', orderDetails);
-    
-    // Redirect to the success page with order details
-    if(res.data.success){
-      setTimeout(() => {
+        new_initial_bill: cart.totalPrice.toFixed(2),
+        // tax:(cart.totalPrice * 0.18).toFixed(2),
+        // total_bill: (cart.totalPrice * 1.18).toFixed(2),
+      };
+      const res = await axios.post("api/updateexistingorder", orderDetails);
+
+      // Redirect to the success page with order details
+      if (res.data.success) {
         dispatch(clearCart());
-      }, 1000);
-  
-      router.push(`/OrderSuccess?id=${restaurant_id}&table=${table_number}&orderId=${orderId}`);
+        router.push(
+          `/OrderSuccess?id=${restaurant_id}&table=${table_number}&orderId=${orderId}`
+        );
+      } else {
+        toast.error(res.data.error);
+      }
     }
-    else
-    {
-      localStorage.removeItem('orderId');
-      toast.error(res.data.error)
-    }
-  }
-  else{
-    const orderId = savedorderid; // Replace this with the actual customer ID logic if needed
-    const orderDetails = {
-      order_id: orderId,
-      new_order_items:
-        {
-          items: cart.items,
-          notes:notes,
-          item_total: cart.totalPrice.toFixed(2),
-          charges: (cart.totalPrice * 0.18).toFixed(2),
-          total_price: (cart.totalPrice * 1.18).toFixed(2),
-          status:"Ordered"
-        },
-      new_initial_bill:cart.totalPrice.toFixed(2),
-      // tax:(cart.totalPrice * 0.18).toFixed(2),
-      // total_bill: (cart.totalPrice * 1.18).toFixed(2),
-    };
-    const res = await axios.post('api/updateexistingorder', orderDetails);
-    
-    // Redirect to the success page with order details
-    if(res.data.success){
-      dispatch(clearCart());
-      router.push(`/OrderSuccess?id=${restaurant_id}&table=${table_number}&orderId=${orderId}`);
-    }
-    else
-    {
-      toast.error(res.data.error)
-    }
-  }
-    
   };
 
   if (!isHydrated) {
-    return <div><Pageloader/></div>; // You can replace this with a skeleton loader or a spinner
+    return (
+      <div>
+        <Pageloader />
+      </div>
+    ); // You can replace this with a skeleton loader or a spinner
   }
 
   return (
     <div>
-      <Toaster/>
+      <Toaster />
       <header>
         <div className="h-16 bg-[#661268] flex justify-between px-4 items-center">
           <div>
@@ -160,9 +178,18 @@ function ConfirmOrder() {
           <ConfirmCard key={i} item={item} />
         ))}
         <section className=" mt-10 mx-4">
-          <h2 className="pl-1 text-sm italic font-light">Add notes for the Chef (if you want any) :</h2>
+          <h2 className="pl-1 text-sm italic font-light">
+            Add notes for the Chef (if you want any) :
+          </h2>
           <div className="h-fit min-h-10  bg-white">
-          <textarea id="message" rows="2" value={notes} onChange={(e)=>setnotes(e.target.value)} className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border-2 border-[#661268] " placeholder="Write your thoughts here..."></textarea>
+            <textarea
+              id="message"
+              rows="2"
+              value={notes}
+              onChange={(e) => setnotes(e.target.value)}
+              className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border-2 border-[#661268] "
+              placeholder="Write your thoughts here..."
+            ></textarea>
           </div>
         </section>
         <section className="px-4 mt-10">

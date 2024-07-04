@@ -3,7 +3,8 @@ import { fooditems } from './FoodItems';
 
 
 export const singleOrders = new mongoose.Schema({
-    items: [fooditems],
+    items: [{type: mongoose.Schema.Types.ObjectId,
+        ref: 'OrderFoodItems'}],
     notes:{
         type:String,
     },

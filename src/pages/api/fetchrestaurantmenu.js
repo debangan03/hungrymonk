@@ -6,8 +6,7 @@ const handler=async(req,res)=>{
     if(req.method=="POST"){
         try{
         const {restaurant_id}=req.body;
-        
-        const menu=await RestaurantItems.findOne({restaurant_id});
+        const menu=await RestaurantItems.findOne({restaurant_id}).populate('food_items');;
         res.status(200).json({success:true,data:menu});
     }
         catch(e){
