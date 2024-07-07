@@ -4,7 +4,9 @@ import React from 'react'
 import goldbg from "../assets/goldbg.png";
 import maskvector from "../assets/Mask_group.png";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
-function OrderHeader({name}) {
+import { useRouter } from 'next/navigation';
+function OrderHeader({name,id,table}) {
+  const router=useRouter();
   return (
     <div><div className="h-[170px] relative w-screen bg-gradient-to-b from-[#FFF9EA] mix-blend-multiply to-[#F5EC02]/30">
     <Image
@@ -18,14 +20,15 @@ function OrderHeader({name}) {
         <div className="mb-6 w-48 text-center mx-auto h-[2px] bg-gradient-to-r from-transparent via-[#a09fa0] to-transparent"></div>
     
     <div className="flex relative justify-center items-center mt-4">
-      <Link
-        href={"/TippPage"}
+      <button
+      type="button"
+        onClick={()=>{router.push(`/Tip?id=${id}&table=${table}`)}}
         className="bg-[#6C0345] rounded-full py-1 px-4 text-[#FFF9EA] flex justify-center items-center hover:scale-90 duration-700"
       >
         Treat the team
         
         <ArrowRightAltIcon />
-      </Link>
+      </button>
     </div>
   </div></div>
   )

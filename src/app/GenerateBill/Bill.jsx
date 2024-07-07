@@ -10,10 +10,10 @@ function Bill() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [orderDetails, setOrderDetails] = useState(null);
-
   const restaurant_id = searchParams.get("id");
   const table_number = searchParams.get("table");
-  const [restaurant_name, setrestaurant_name] = useState();
+  const restaurant_name = searchParams.get("name");
+  const [responsecome, setresponsecome] = useState(false);
   function getLocalStorage(key) {
     const itemStr = localStorage.getItem(key);
     if (!itemStr) {
@@ -30,33 +30,43 @@ function Bill() {
 
   useEffect(() => {
     try {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         const orderId = getLocalStorage("orderId");
         if (orderId != null) {
           const getorder = async () => {
-            const restaurant_data=await axios.post("/api/fetchrestaurantmenu",{restaurant_id})
-            setrestaurant_name(restaurant_data.data.data.restaurant_name);
             const res = await axios.post("/api/fetchspecificorder", {
               orderId: orderId,
             });
-            setOrderDetails(res.data.data);
+            setresponsecome(true);
+            console.log(res.data);
             if (!res.data.success) {
               toast.error(
-                "Failed to generate your bill. Please ask in-person to the waiter"
+                "Seems like you haven't yet ordered"
               );
               
+                window.location=`/?id=${restaurant_id}&table=${table_number}`;
+              
+            } else {
+              setOrderDetails(res.data.data);
             }
           };
           getorder();
         } else {
+          setresponsecome(true);
           toast.error(
-            "Failed to generate your bill. Please ask in-person to the waiter"
+            "Seems like you haven't yet ordered"
           );
+          
+            window.location=`/?id=${restaurant_id}&table=${table_number}`;
+          
         }
       } else {
+        setresponsecome(true);
         toast.error(
           "Failed to generate your bill. Please ask in-person to the waiter"
         );
+        
+          window.location=`/?id=${restaurant_id}&table=${table_number}`;
         
       }
     } catch (error) {
@@ -64,10 +74,14 @@ function Bill() {
       toast.error(
         "Failed to generate your bill. Please ask in-person to the waiter"
       );
+      
+        window.location=`/?id=${restaurant_id}&table=${table_number}`;
+      
+      
     }
   }, []);
 
-  if (!orderDetails) {
+  if (!responsecome) {
     return (
       <div>
         <Pageloader />
@@ -76,10 +90,11 @@ function Bill() {
   }
 
   return (
-    <><BillHeader name={restaurant_name}/>
-      <div className="flex flex-col justify-center items-center bg-[#FFF9EA] px-4 mb-32 mt-10">
+    <>
+      <BillHeader name={restaurant_name} id={restaurant_id} table={table_number}/>
+      <div className="flex flex-col justify-center items-center bg-[#FFF9EA] px-4 mb-32 mt-6">
         <Toaster />
-        
+
         <div className="text-lg flex mt-4 justify-center items-center space-x-4 text-[#661268] w-full">
           <div className="lg:w-40 w-16 h-[2px] bg-gradient-to-r from-transparent to-[#661268]"></div>
           <p className="lg:text-lg text-[18px] uppercase tracking-widest">
@@ -88,20 +103,26 @@ function Bill() {
           <div className="lg:w-40 w-16 h-[2px] bg-gradient-to-r from-[#661268] to-transparent"></div>
         </div>
 
-        <p className="text-sm text-[#4E0433] mb-4">Happy food. Happy us!</p>
+        <p className="text-sm text-[#4E0433] mb-6">Happy food. Happy us!</p>
 
-        <div className="mx-auto bg-white w-full shadow-lg rounded-lg p-4">
+        {orderDetails &&<div className="mx-auto bg-white w-full shadow-lg rounded-lg p-4">
           <div className="mb-4">
             <h2 className="text-xl font-semibold text-gray-700">
               Order Details:
             </h2>
-            <hr className="bg-black my-3"/>
+            <hr className="bg-black my-3" />
             <ul className="list-disc list-inside">
               {orderDetails[0]?.order_items.map((item, i) => (
                 <div key={i}>
                   {item.items.map((item1, j) => (
-                    <li key={j} className=" text-gray-700 flex justify-between border-b border-dotted border-gray-400 py-2">
-                      <span>{item1?.food?.name}</span><span>₹ {item1?.food?.price} x {item1?.quantity}</span>
+                    <li
+                      key={j}
+                      className=" text-gray-700 flex justify-between border-b border-dotted border-gray-400 py-2"
+                    >
+                      <span>{item1?.food?.name}</span>
+                      <span>
+                        ₹ {item1?.food?.price} x {item1?.quantity}
+                      </span>
                     </li>
                   ))}
                 </div>
@@ -126,7 +147,7 @@ function Bill() {
               ₹ {orderDetails[0]?.total_bill}
             </span>
           </div>
-        </div>
+        </div>}
 
         <button
           // onClick={() =>
@@ -137,7 +158,9 @@ function Bill() {
           Leave a review
         </button>
       </div>
-      <div className="bottom-0"><Footer /></div>
+      <div className="bottom-0">
+        <Footer />
+      </div>
     </>
   );
 }

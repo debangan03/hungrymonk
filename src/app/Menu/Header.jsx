@@ -69,14 +69,15 @@ function Header({name,restaurant_id,table_number}) {
         </p>
       </div>
       <div className="flex relative justify-center items-center mt-4">
-        <Link
-          href={"/TippPage"}
+        <button
+        type="button"
+          onClick={()=>{router.push(`/Tip?id=${restaurant_id}&table=${table_number}`)}}
           className="bg-[#6C0345] rounded-full py-1 px-4 text-[#FFF9EA] flex justify-center items-center hover:scale-90 duration-700"
         >
           Treat the team
           
           <ArrowRightAltIcon />
-        </Link>
+        </button>
       </div>
     </div>
   );

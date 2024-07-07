@@ -6,6 +6,9 @@ import success from "../assets/success.png";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Pageloader from "../loaders/pageloader";
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+import Link from "next/link";
+
 function SuccessPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -55,12 +58,23 @@ function SuccessPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-[#FFF9EA] px-4">
+    <div className="min-h-screen py-16 flex flex-col justify-center items-center bg-[#FFF9EA] px-4">
       <Toaster />
       <Image height={100} width={100} alt="success" src={success} />
       <h1 className="text-4xl font-bold text-[#661268] mb-4">
         Order Successful!
       </h1>
+      <div className="flex relative justify-center items-center mb-2">
+        <button
+        type="button"
+        onClick={()=>{router.push(`/Tip?id=${restaurant_id}&table=${table_number}`)}}
+          className="bg-[#6C0345] rounded-full py-1 px-4 text-[#FFF9EA] flex justify-center items-center hover:scale-90 duration-700"
+        >
+          Treat the team
+          
+          <ArrowRightAltIcon />
+        </button>
+      </div>
       <p className="text-lg text-[#4E0433] mb-4">Happy food. Happy us!</p>
 
       <div className="mx-auto bg-white w-full shadow-lg rounded-lg p-4">
@@ -100,14 +114,13 @@ function SuccessPage() {
           </span>
         </div>
       </div>
-
       <button
         onClick={() =>
           router.push(`/Menu?id=${restaurant_id}&table=${table_number}`)
         }
         className="mt-6 px-4 py-2 bg-[#661268] text-white rounded-md"
       >
-        Add more items
+        Add more items / Go Home
       </button>
     </div>
   );

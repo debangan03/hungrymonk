@@ -18,10 +18,12 @@ function ConfirmOrder() {
   console.log(cart);
   const [isHydrated, setIsHydrated] = useState(false);
   const [notes, setnotes] = useState("");
+  const [isbuttonloading, setisbuttonloading] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const restaurant_id = searchParams.get("id");
   const table_number = searchParams.get("table");
+
   function setLocalStorage(key, value, hours) {
     const now = new Date();
     const item = {
@@ -30,12 +32,14 @@ function ConfirmOrder() {
     };
     localStorage.setItem(key, JSON.stringify(item));
   }
+
   useEffect(() => {
     if (!cart || cart?.items?.length <= 0) {
       toast.error("Cart is empty, please add items to proceed");
-        router.push(`/Menu?id=${restaurant_id}&table=${table_number}`);
+      router.push(`/Menu?id=${restaurant_id}&table=${table_number}`);
     }
   }, []);
+
   function getLocalStorage(key) {
     const itemStr = localStorage.getItem(key);
     if (!itemStr) {
@@ -49,13 +53,14 @@ function ConfirmOrder() {
     }
     return item.value;
   }
+
   let savedcustomerid;
   let savedorderid;
   let savedrestaurantid;
   if (typeof window !== "undefined") {
     savedcustomerid = localStorage.getItem("customerId");
     savedorderid = getLocalStorage("orderId");
-    savedrestaurantid=localStorage.getItem("restaurantId");
+    savedrestaurantid = localStorage.getItem("restaurantId");
   } else {
     return (
       <div>
@@ -63,20 +68,22 @@ function ConfirmOrder() {
       </div>
     );
   }
+
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
   const handleplaceorder = async () => {
-    if(savedrestaurantid!=restaurant_id){
-      localStorage.removeItem("restaurantid");
+    if (savedrestaurantid != restaurant_id) {
+      localStorage.removeItem("restaurantId");
       localStorage.removeItem("orderId");
     }
+    console.log(savedrestaurantid, savedorderid, savedcustomerid);
     const customerId =
       savedcustomerid == null || savedcustomerid == ""
         ? ("CUS_" + uuidv4()).toString()
         : savedcustomerid;
-    if ((savedorderid == null && savedrestaurantid==null) || (savedorderid == "" && savedrestaurantid=="")) {
+    if (savedorderid == null || savedrestaurantid == null || savedorderid == "" || savedrestaurantid == "") {
       const orderId = ("ORD_" + uuidv4()).toString(); // Replace this with the actual customer ID logic if needed
       localStorage.setItem("customerId", customerId); // Store customer ID in local storage
       setLocalStorage("orderId", orderId, 4);
@@ -106,14 +113,15 @@ function ConfirmOrder() {
       if (res.data.success) {
         setTimeout(() => {
           dispatch(clearCart());
-        }, 1000);
+        }, 2000);
 
         router.push(
           `/OrderSuccess?id=${restaurant_id}&table=${table_number}&orderId=${orderId}`
         );
       } else {
-        localStorage.removeItem("restaurantid");
+        localStorage.removeItem("restaurantId");
         localStorage.removeItem("orderId");
+        setisbuttonloading(false)
         toast.error(res.data.error);
       }
     } else {
@@ -136,11 +144,14 @@ function ConfirmOrder() {
 
       // Redirect to the success page with order details
       if (res.data.success) {
-        dispatch(clearCart());
+        setTimeout(() => {
+          dispatch(clearCart());
+        }, 2000);
         router.push(
           `/OrderSuccess?id=${restaurant_id}&table=${table_number}&orderId=${orderId}`
         );
       } else {
+        setisbuttonloading(false);
         toast.error(res.data.error);
       }
     }
@@ -223,10 +234,33 @@ function ConfirmOrder() {
       </main>
       <footer className="h-[100px] fixed bottom-0 w-full bg-[#661268] p-4 text-white flex justify-center items-center">
         <button
-          onClick={handleplaceorder}
-          className="bg-white border-2 px-4 py-2 w-full rounded-lg text-[#661268] tracking-[0.5rem] font-extrabold"
+          onClick={() => { setisbuttonloading(true); handleplaceorder(); }}
+          disabled={isbuttonloading}
+          className="bg-white border-2 px-4 py-2 w-full rounded-lg text-[#661268] tracking-[0.5rem] font-extrabold relative"
         >
-          PLACE ORDER
+          {isbuttonloading ? (
+            <svg
+              className="animate-spin h-5 w-5 text-[#661268] absolute left-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          ) : null}
+          {isbuttonloading ? "PLACING ORDER" : "PLACE ORDER"}
         </button>
       </footer>
     </div>

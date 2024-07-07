@@ -39,13 +39,17 @@ function Order() {
             const res = await axios.post("/api/fetchspecificorder", {
               orderId: orderId,
             });
-            setOrderDetails(res.data.data);
+            
             console.log(res.data.data);
             if (!res.data.success) {
               toast.error(
                 "Failed to fetch your order. Please ask in-person to the waiter"
               );
               router.push(`/Menu?id=${restaurant_id}&table=${table_number}`); // Redirect to home if there's no order info
+            }
+            else
+            {
+              setOrderDetails(res.data.data);
             }
           };
           getorder();
@@ -73,7 +77,7 @@ function Order() {
   }
 
   return (
-    <><OrderHeader name={restaurant_name}/>
+    <><OrderHeader name={restaurant_name} id={restaurant_id} table={table_number}/>
       <div className="flex flex-col justify-center items-center bg-[#FFF9EA] px-4 mb-32 mt-4">
         <Toaster />
         
@@ -85,9 +89,9 @@ function Order() {
           <div className="lg:w-40 w-16 h-[2px] bg-gradient-to-r from-[#661268] to-transparent"></div>
         </div>
 
-        <p className="text-sm text-[#4E0433] mb-4">Happy food. Happy us!</p>
+        <p className="text-sm text-[#4E0433] mb-6">Happy food. Happy us!</p>
 
-        <div className="mx-auto bg-white w-full shadow-lg rounded-lg p-4 mt-8">
+        <div className="mx-auto bg-white w-full shadow-lg rounded-lg p-4 ">
           <div className="mb-4">
             <h2 className="text-xl font-semibold text-gray-700">
               Order Details:
@@ -132,6 +136,14 @@ function Order() {
           className="mt-6 px-4 py-2 bg-[#661268] text-white rounded-md"
         >
           Add more items
+        </button>
+        <button
+          onClick={() =>
+            router.push(`/GenerateBill?id=${restaurant_id}&table=${table_number}&name=${restaurant_name}`)
+          }
+          className="mt-6 px-4 py-2 bg-[#661268] text-white rounded-md"
+        >
+          Generate my Bill
         </button>
       </div>
       <div className="bottom-0"><Footer /></div>
