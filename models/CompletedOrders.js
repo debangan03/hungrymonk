@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
 import { singleOrders } from './SingleOrders';
 
-const orders = new mongoose.Schema({
+const completedOrders = new mongoose.Schema({
+    bill_no:{
+        type:String,
+    },
     customer_id: {
         type: String,
     },
@@ -16,24 +19,33 @@ const orders = new mongoose.Schema({
     },
     order_items: [{type: mongoose.Schema.Types.ObjectId,
         ref: 'SingleOrders'}],
-    total_quantity:{
-        type: String,
+    total_quantity: {
+        type:String,
     },
     initial_bill: {
         type: String,
     },
+    cgstamount:{
+        type:String,
+    },
+    sgstamount:{
+        type:String,
+    },
     tax: {
         type: String,
     },
-    discount:{
+    discountpercent:{
         type:String,
+    },
+    discountamount:{
+        type:String,
+    },
+    discountdescription:{
+        type: String,
     },
     total_bill: {
         type: String,
     },
-    order_status:{
-        type: String,
-    }
 }, { timestamps: true })
 
-export default mongoose.models.Orders || mongoose.model("Orders", orders)
+export default mongoose.models.CompletedOrders || mongoose.model("CompletedOrders", completedOrders)

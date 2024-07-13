@@ -23,7 +23,8 @@ function ConfirmOrder() {
   const dispatch = useDispatch();
   const restaurant_id = searchParams.get("id");
   const table_number = searchParams.get("table");
-
+  const [sgst, setsgst] = useState("");
+  const [cgst, setcgst] = useState("");
   function setLocalStorage(key, value, hours) {
     const now = new Date();
     const item = {
@@ -38,6 +39,21 @@ function ConfirmOrder() {
       toast.error("Cart is empty, please add items to proceed");
       router.push(`/Menu?id=${restaurant_id}&table=${table_number}`);
     }
+    const fetchtaxrates = async () => {
+      try {
+        const res = await axios.post(`/api/fetchrestaurantmenu`, {
+          restaurant_id,
+        });
+        console.log(res.data.data);
+        setcgst(res.data.data.cgst);
+        setsgst(res.data.data.sgst);
+      } catch (e) {
+        toast.error(
+          "Failed to fetch details. Please try again after refreshing."
+        );
+      }
+    };
+    fetchtaxrates();
   }, []);
 
   function getLocalStorage(key) {
@@ -83,11 +99,21 @@ function ConfirmOrder() {
       savedcustomerid == null || savedcustomerid == ""
         ? ("CUS_" + uuidv4()).toString()
         : savedcustomerid;
-    if (savedorderid == null || savedrestaurantid == null || savedorderid == "" || savedrestaurantid == "") {
+    const nettax = (0.01*(
+      cart.totalPrice *
+      (parseFloat(cgst) + parseFloat(sgst))
+    )).toFixed(2);
+    if (
+      savedorderid == null ||
+      savedrestaurantid == null ||
+      savedorderid == "" ||
+      savedrestaurantid == ""
+    ) {
       const orderId = ("ORD_" + uuidv4()).toString(); // Replace this with the actual customer ID logic if needed
       localStorage.setItem("customerId", customerId); // Store customer ID in local storage
       setLocalStorage("orderId", orderId, 4);
       localStorage.setItem("restaurantId", restaurant_id);
+
       const orderDetails = {
         customer_id: customerId, // Include customer ID in the order details
         order_id: orderId,
@@ -98,15 +124,21 @@ function ConfirmOrder() {
             items: cart.items,
             notes: notes,
             item_total: cart.totalPrice.toFixed(2),
-            charges: (cart.totalPrice * 0.18).toFixed(2),
-            total_price: (cart.totalPrice * 1.18).toFixed(2),
+            charges: nettax,
+            total_price: (
+              parseFloat(cart.totalPrice) + parseFloat(nettax)
+            ).toFixed(2),
             status: "Ordered",
           },
         ],
+        total_quantity: cart.totalQuantity,
         initial_bill: cart.totalPrice.toFixed(2),
-        tax: (cart.totalPrice * 0.18).toFixed(2),
-        total_bill: (cart.totalPrice * 1.18).toFixed(2),
+        tax: nettax,
+        total_bill: (parseFloat(cart.totalPrice) + parseFloat(nettax)).toFixed(
+          2
+        ),
       };
+      console.log(cgst,sgst,nettax);
       const res = await axios.post("api/createneworder", orderDetails);
 
       // Redirect to the success page with order details
@@ -121,7 +153,7 @@ function ConfirmOrder() {
       } else {
         localStorage.removeItem("restaurantId");
         localStorage.removeItem("orderId");
-        setisbuttonloading(false)
+        setisbuttonloading(false);
         toast.error(res.data.error);
       }
     } else {
@@ -132,10 +164,15 @@ function ConfirmOrder() {
           items: cart.items,
           notes: notes,
           item_total: cart.totalPrice.toFixed(2),
-          charges: (cart.totalPrice * 0.18).toFixed(2),
-          total_price: (cart.totalPrice * 1.18).toFixed(2),
+          charges: nettax,
+          total_price: (
+            parseFloat(cart.totalPrice) + parseFloat(nettax)
+          ).toFixed(2),
           status: "Ordered",
         },
+        cgst: cgst,
+        sgst: sgst,
+        new_total_quantity: cart.totalQuantity,
         new_initial_bill: cart.totalPrice.toFixed(2),
         // tax:(cart.totalPrice * 0.18).toFixed(2),
         // total_bill: (cart.totalPrice * 1.18).toFixed(2),
@@ -234,7 +271,10 @@ function ConfirmOrder() {
       </main>
       <footer className="h-[100px] fixed bottom-0 w-full bg-[#661268] p-4 text-white flex justify-center items-center">
         <button
-          onClick={() => { setisbuttonloading(true); handleplaceorder(); }}
+          onClick={() => {
+            setisbuttonloading(true);
+            handleplaceorder();
+          }}
           disabled={isbuttonloading}
           className="bg-white border-2 px-4 py-2 w-full rounded-lg text-[#661268] tracking-[0.5rem] font-extrabold relative"
         >

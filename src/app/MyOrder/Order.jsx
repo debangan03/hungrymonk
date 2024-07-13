@@ -89,7 +89,7 @@ function Order() {
           <div className="lg:w-40 w-16 h-[2px] bg-gradient-to-r from-[#661268] to-transparent"></div>
         </div>
 
-        <p className="text-sm text-[#4E0433] mb-6">Happy food. Happy us!</p>
+        <p className="text-sm text-[#4E0433] mb-6">Happy you! Happy us!</p>
 
         <div className="mx-auto bg-white w-full shadow-lg rounded-lg p-4 ">
           <div className="mb-4">
@@ -102,7 +102,7 @@ function Order() {
                 <div key={i}>
                   {item.items.map((item1, j) => (
                     <li key={j} className="text-gray-700 flex justify-between border-b border-dotted border-gray-400 py-2">
-                      <span>{item1?.food?.name}</span> <span>₹ {item1?.food?.price} x {item1?.quantity}</span>
+                      <span>{item1?.food?.name}&nbsp;&nbsp;x{item1?.quantity}</span> <span>₹ {parseFloat(item1?.food?.price)*parseFloat(item1?.quantity)} </span>
                     </li>
                   ))}
                 </div>
@@ -117,7 +117,7 @@ function Order() {
             </span>
           </div>
           <div className="flex justify-between mb-2">
-            <span className="font-semibold text-gray-700">GST (18%)</span>
+            <span className="font-semibold text-gray-700">Taxes</span>
             <span className="text-gray-700">₹ {orderDetails[0]?.tax}</span>
           </div>
           <div className="border-t border-gray-300 my-2"></div>

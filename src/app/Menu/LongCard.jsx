@@ -40,7 +40,7 @@ function LongCard({ item }) {
         <p className="text-[9px] text-start text-[#565556]">{item.description}</p>
       </div>
       <div className="w-2/5 flex justify-end relative">
-        <img className="h-24 w-40 -z-10 shadow-md" src="https://t3.ftcdn.net/jpg/05/66/68/36/360_F_566683667_BeBecGFABNQYkZhquqJxhSj7UOcCY7ZJ.jpg" alt="item" />
+        <img className="h-24 w-40 -z-10 object-cover object-center shadow-md" src={item.image} alt="item" />
         <div className="absolute rounded-lg px-2 py-[2px] -bottom-2 lg:right-24 lg:left-[60%] -left-4 bg-[#FFF9EA] text-[#966729] border-[#966729] border-2 hover:scale-90 duration-200 font-semibold mb-2 flex items-center space-x-2 text-2xl">
           {cartItem?.quantity >0 ? (
             <div className="flex justify-center text-center w-full items-center space-x-2 ">

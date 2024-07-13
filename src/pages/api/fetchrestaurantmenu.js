@@ -10,7 +10,9 @@ const handler=async(req,res)=>{
         try{
         const {restaurant_id}=req.body;
         const menu=await RestaurantItems.findOne({restaurant_id}).populate('food_items');
+        console.log(menu)
         if(menu){
+            menu.food_items = menu.food_items.filter(item => item.available_status);
         res.status(200).json({success:true,data:menu});
         }
         else{

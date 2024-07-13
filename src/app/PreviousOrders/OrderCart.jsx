@@ -10,9 +10,9 @@ function OrderCart({item}) {
         <p className='text-[1rem]'>{item.food.name.slice(0,22)}</p>
         <p className='text-[.8rem]'>Price : ₹{item.food.price}</p>
         <p className='text-[.8rem]'>Qty : {item.quantity}</p>
-        <button className='absolute right-0 bottom-0 border-[1px] px-5 border-[#DCBB69] rounded-md text-[#966729] font-semibold py-[2px] text-sm'>
+        {/* <button className='absolute right-0 bottom-0 border-[1px] px-5 border-[#DCBB69] rounded-md text-[#966729] font-semibold py-[2px] text-sm'>
           Add <sup>+</sup>
-        </button>
+        </button> */}
       </div>
     </div>
   );

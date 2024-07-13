@@ -23,7 +23,7 @@ function OrderHeader({name,id,table}) {
       <button
       type="button"
         onClick={()=>{router.push(`/Tip?id=${id}&table=${table}`)}}
-        className="bg-[#6C0345] rounded-full py-1 px-4 text-[#FFF9EA] flex justify-center items-center hover:scale-90 duration-700"
+        className="bg-[#6C0345] rounded-full py-1 px-4 text-[#FFF9EA] flex justify-center items-center hover:scale-90 "
       >
         Treat the team
         

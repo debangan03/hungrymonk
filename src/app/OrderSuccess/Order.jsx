@@ -68,14 +68,14 @@ function SuccessPage() {
         <button
         type="button"
         onClick={()=>{router.push(`/Tip?id=${restaurant_id}&table=${table_number}`)}}
-          className="bg-[#6C0345] rounded-full py-1 px-4 text-[#FFF9EA] flex justify-center items-center hover:scale-90 duration-700"
+          className="bg-[#6C0345] rounded-full py-1 px-4 text-[#FFF9EA] flex justify-center items-center hover:scale-90 "
         >
           Treat the team
           
           <ArrowRightAltIcon />
         </button>
       </div>
-      <p className="text-lg text-[#4E0433] mb-4">Happy food. Happy us!</p>
+      <p className="text-lg text-[#4E0433] mb-4">Happy you! Happy us!</p>
 
       <div className="mx-auto bg-white w-full shadow-lg rounded-lg p-4">
         <div className="mb-4">
@@ -88,7 +88,7 @@ function SuccessPage() {
               <div key={i}>
                 {item.items.map((item1, j) => (
                   <li key={j} className="text-gray-700 flex justify-between border-b border-dotted border-gray-400 py-2">
-                    <span>{item1?.food?.name}</span><span> ₹ {item1?.food?.price} x {item1?.quantity}</span>
+                    <span>{item1?.food?.name} &nbsp;&nbsp;x{item1?.quantity}</span><span> ₹ {parseFloat(item1?.food?.price)*parseFloat(item1?.quantity)} </span>
                   </li>
                 ))}
               </div>
@@ -103,7 +103,7 @@ function SuccessPage() {
           </span>
         </div>
         <div className="flex justify-between mb-2">
-          <span className="font-semibold text-gray-700">GST (18%)</span>
+          <span className="font-semibold text-gray-700">Taxes</span>
           <span className="text-gray-700">₹ {orderDetails[0]?.tax}</span>
         </div>
         <div className="border-t border-gray-300 my-2"></div>

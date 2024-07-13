@@ -4,11 +4,12 @@ import "./border.css";
 import tick from "../assets/icons8-tick.gif"
 import { SiTicktick } from "react-icons/si";
 
-function Team() {
+function Team({data,addandremovewaiter}) {
   const [isSelected, setIsSelected] = useState(false);
 
   const handleClick = () => {
     setIsSelected(!isSelected);
+    addandremovewaiter(data.username);
   };
 
   return (
@@ -21,7 +22,7 @@ function Team() {
       )}
       <div className="flex justify-center items-center pb-1">
         <Image
-          src={"https://tipppz-emp-photos.s3.ap-south-1.amazonaws.com/EMP_18.jpg"}
+          src={data?.image}
           className="rounded-xl rounded-b-none object-cover object-center"
           alt="itembanner"
           loading="lazy"
@@ -29,10 +30,10 @@ function Team() {
           height={160}
         />
       </div>
-      <p className="text-center pb-1 uppercase tracking-tight font-semibold text-[10px]">Adbul Bombwala</p>
+      <p className="text-center pb-1 uppercase tracking-tight font-semibold text-[10px]">{data?.username}</p>
       <div className="flex justify-center items-center">
         <div className='lg:w-24 w-24 h-[1px] bg-gradient-to-r from-[#666666] to-transparent'></div>
-        <p className="text-center text-[0.7rem] px-3 mx-2 bg-amber-200 text-stone-600 rounded-lg tracking-wider">Chef</p>
+        <p className="text-center text-[0.7rem] px-3 mx-2 bg-amber-200 text-stone-950 rounded-lg tracking-wider">{data?.profession}</p>
         <div className='lg:w-24 w-24 h-[1px] bg-gradient-to-r from-transparent to-[#666666]'></div>
       </div> 
     </div>

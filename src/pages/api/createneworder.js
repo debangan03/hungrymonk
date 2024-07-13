@@ -14,9 +14,9 @@ const handler = async (req, res) => {
         restaurant_id,
         table_number,
         order_items,
+        total_quantity,
         initial_bill,
         tax,
-        discount,
         total_bill,
       } = req.body;
       const order_status = "new";
@@ -77,9 +77,9 @@ const handler = async (req, res) => {
         restaurant_id,
         table_number,
         order_items: savedSingleOrders.map(order => order._id),
+        total_quantity,
         initial_bill,
         tax,
-        discount,
         total_bill,
         order_status,
       });

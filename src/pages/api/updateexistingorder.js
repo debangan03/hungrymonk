@@ -8,7 +8,7 @@ import RestaurantItems from "../../../models/RestaurantItems";
 const handler = async (req, res) => {
   if (req.method === "POST") {
     try {
-      const { order_id, new_order_items, new_initial_bill } = req.body;
+      const { order_id,new_total_quantity, new_order_items, new_initial_bill, cgst, sgst } = req.body;
       const oldorder = await Orders.findOne({ order_id });
       
       if (oldorder) {
@@ -34,15 +34,15 @@ const handler = async (req, res) => {
         });
 
         const savedSingleOrder = await newSingleOrder.save();
-
+        const calculatedtaxrate=(0.01*(parseFloat(cgst)+parseFloat(sgst))).toFixed(2);
         // Add new SingleOrder to the existing order
         oldorder.order_items.push(savedSingleOrder._id);
-
+        const total_quantity=(parseInt(oldorder.total_quantity))+parseInt(new_total_quantity);
         // Recalculate the bills
         const initial_bill = (parseFloat(oldorder.initial_bill) + parseFloat(new_initial_bill)).toFixed(2);
-        const tax = (parseFloat(initial_bill) * 0.18).toFixed(2);
+        const tax = (parseFloat(initial_bill) * parseFloat(calculatedtaxrate)).toFixed(2);
         const total_bill = (parseFloat(initial_bill) + parseFloat(tax)).toFixed(2);
-
+        oldorder.total_quantity=total_quantity;
         oldorder.initial_bill = initial_bill.toString();
         oldorder.tax = tax.toString();
         oldorder.total_bill = total_bill.toString();

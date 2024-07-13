@@ -7,6 +7,12 @@ const restaurantItemsSchema = new mongoose.Schema({
     restaurant_name: {
         type: String,
     },
+    cgst:{
+        type: String,
+    },
+    sgst:{
+        type: String,
+    },
     food_items: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'FoodItems'

@@ -58,7 +58,7 @@ const page = () => {
             Previous Orders
           </Link>
           <Link href={`/Menu?id=${id}&table=${table_number}&name=${name}`}  className="border-2 text-center poppins-semibold w-40 border-[#FFF9EA] z-50 bg-[#440129] px-4 rounded-full text-[#FFF9EA] py-3">
-            New Order
+            Place an Order
           </Link>
           <Link href={`/GenerateBill?id=${id}&table=${table_number}&name=${name}`}  className="border-2 text-center poppins-semibold w-40 border-[#FFF9EA] bg-[#440129] px-4 z-50 rounded-full text-[#FFF9EA] py-3">
             Get Bill
