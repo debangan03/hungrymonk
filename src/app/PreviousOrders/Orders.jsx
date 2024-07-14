@@ -5,7 +5,7 @@ import image from "../assets/Mask_group.png";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
-import Pageloader from "../loaders/pageloader";
+import LoadingPage from "../loaders/LoadingPage";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
@@ -47,7 +47,7 @@ function Orders() {
   if (!responsecome) {
     return (
       <div>
-        <Pageloader />
+        <LoadingPage />
       </div>
     );
   }

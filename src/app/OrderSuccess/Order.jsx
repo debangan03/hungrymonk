@@ -5,7 +5,7 @@ import Image from "next/image";
 import success from "../assets/success.png";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import Pageloader from "../loaders/pageloader";
+import LoadingPage from "../loaders/LoadingPage";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import Link from "next/link";
 
@@ -52,7 +52,7 @@ function SuccessPage() {
   if (!orderDetails) {
     return (
       <div>
-        <Pageloader />
+        <LoadingPage />
       </div>
     );
   }

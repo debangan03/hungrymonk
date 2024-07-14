@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react'
 import Orders from './Orders'
 import Footer from '../Menu/Footer'
-import Pageloader from '../loaders/pageloader'
+import LoadingPage from '../loaders/LoadingPage'
 
 function page() {
   return (
-    <div><Suspense fallback={<div><Pageloader/></div>}>
+    <div><Suspense fallback={<div><LoadingPage/></div>}>
       <Orders/>
     <Footer/>
     </Suspense></div>

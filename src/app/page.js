@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 
-import Pageloader from "./loaders/pageloader";
+import LoadingPage from "./loaders/LoadingPage";
 import FetchAllData from "./Menu/FetchAllData";
 import Landing from "./LandingPage/Landing";
 
 export default function Home() {
   return (
-    <Suspense fallback={<Pageloader/>}>
+    <Suspense fallback={<LoadingPage/>}>
       <Landing/>
       </Suspense>
   );

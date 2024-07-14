@@ -7,7 +7,7 @@ import LongCard from "../Menu/LongCard";
 import Orderviewer from "../Menu/Orderviewer";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
-import Pageloader from "../loaders/pageloader";
+import LoadingPage from "../loaders/LoadingPage";
 
 
 function SearchPage() {
@@ -48,7 +48,7 @@ function SearchPage() {
     <>
       {!filteredItems && (
         <div>
-          <Pageloader />
+          <LoadingPage />
         </div>
       )}
       {filteredItems && (
