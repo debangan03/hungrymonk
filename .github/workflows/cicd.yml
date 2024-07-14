@@ -2,10 +2,10 @@ name: Deploy Next.js application
 
 on:
   push:
-  branches:
-    - main
+    branches:
+      - main
 
-job:
+jobs:
   build:
     runs-on: ubuntu-latest
     steps:
