@@ -26,6 +26,6 @@ jobs:
       - name: Pull Docker image from Docker Hub
         run: docker pull baksish247/hungrymonk:latest
       - name: Delete Old Docker Image
-        run: docker rm -f baksish_hmonk_ec2
+        run: docker rm -f ip-172-31-86-158
       - name: Run Docker Container
-        run: docker run -d -p 3000:3000 --name baksish_hmonk_ec2 baksish247/hungrymonk
+        run: docker run -d -p 3000:3000 --name ip-172-31-86-158 baksish247/hungrymonk
