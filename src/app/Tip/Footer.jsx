@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 function Footer() {
   return (
-    <footer className="bg-[#661268] text-[#FFF9EA] text-center  py-10  relative h-80">
+    <footer className="bg-[#441029] text-[#FFF9EA] text-center  py-10  relative h-80">
       <div className="max-w-screen mx-auto">
         <h2 className="text-lg mb-4">Thank you for Visiting Us!</h2>
         <p className="mb-4">powered by</p>

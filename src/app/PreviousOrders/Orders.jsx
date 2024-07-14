@@ -19,6 +19,8 @@ function Orders() {
   const [pastorders, setpastorders] = useState();
   const [responsecome, setresponsecome] = useState(false);
   const [responsefalse, setresponsefalse] = useState(false);
+  const [countdown, setCountdown] = useState(10); // Countdown state
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       var customer_id = localStorage.getItem("customerId");
@@ -43,6 +45,22 @@ function Orders() {
     };
     fetchallorders();
   }, []);
+
+  useEffect(() => {
+    if (responsefalse) {
+      const interval = setInterval(() => {
+        setCountdown((prevCountdown) => prevCountdown - 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [responsefalse]);
+
+  useEffect(() => {
+    if (countdown === 0) {
+      router.push(`/Menu?id=${restaurant_id}&table=${table_number}`);
+    }
+  }, [countdown, restaurant_id, table_number, router]);
 
   if (!responsecome) {
     return (
@@ -71,11 +89,11 @@ function Orders() {
         </Link>
       </div>
       <div className="text-base flex mt-4 px-2 mb-6 justify-center items-center space-x-2 text-[#565556] w-full">
-        <div className="lg:w-40 w-16 h-[2px] bg-gradient-to-r from-transparent to-[#661268]"></div>
-        <p className="lg:text-lg text-[15px] text-[#661268] uppercase tracking-widest">
+        <div className="lg:w-40 w-16 h-[2px] bg-gradient-to-r from-transparent to-[#441029]"></div>
+        <p className="lg:text-lg text-[15px] text-[#441029] uppercase tracking-widest">
           Previous Orders
         </p>
-        <div className="lg:w-40 w-16 h-[2px] bg-gradient-to-r from-[#661268] to-transparent"></div>
+        <div className="lg:w-40 w-16 h-[2px] bg-gradient-to-r from-[#441029] to-transparent"></div>
       </div>
       {pastorders?.length > 0 &&
         pastorders.map((order, i) => (
@@ -109,15 +127,25 @@ function Orders() {
           </>
         ))}
       {responsefalse && (
-        <div>
-          <h1 className="mx-8 text-center mt-32 text-2xl ">
-            Seems like this is your first time in our server.
+        <div className="flex flex-col items-center justify-center mt-32 mb-32">
+        <div className="text-center mx-8">
+          <h1 className="text-4xl font-bold text-[#441029]">
+            Welcome!
           </h1>
-          <h2 className="mt-10 mx-10 text-4xl text-center font-semibold text-[#661268]">
-            {" "}
+          <p className="text-lg mt-4 text-gray-700">
+            Seems like this is your first time here.
+          </p>
+          <p className="text-lg text-gray-700">
             Order and enjoy your first meal!
-          </h2>
+          </p>
+          <div className="mt-10">
+            <p className="text-lg text-[#441029] font-semibold">
+              Redirecting you to home page in{" "}
+              <span className="font-bold">{countdown}</span> seconds...
+            </p>
+          </div>
         </div>
+      </div>
       )}
     </div>
   );

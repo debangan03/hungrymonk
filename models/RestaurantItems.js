@@ -17,6 +17,13 @@ const restaurantItemsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'FoodItems'
     }],
+    nooftables:{
+        type:String,
+      },
+      reviewLink:{
+        type:String,
+      },
+  
 }, { timestamps: true });
 
 export default mongoose.models.RestaurantItems || mongoose.model('RestaurantItems', restaurantItemsSchema);

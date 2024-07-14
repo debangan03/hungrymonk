@@ -61,7 +61,7 @@ function SuccessPage() {
     <div className="min-h-screen py-16 flex flex-col justify-center items-center bg-[#FFF9EA] px-4">
       <Toaster />
       <Image height={100} width={100} alt="success" src={success} />
-      <h1 className="text-4xl font-bold text-[#661268] mb-4">
+      <h1 className="text-4xl font-bold text-[#441029] mb-4">
         Order Successful!
       </h1>
       <div className="flex relative justify-center items-center mb-2">
@@ -118,7 +118,7 @@ function SuccessPage() {
         onClick={() =>
           router.push(`/Menu?id=${restaurant_id}&table=${table_number}`)
         }
-        className="mt-6 px-4 py-2 bg-[#661268] text-white rounded-md"
+        className="mt-6 px-4 py-2 bg-[#441029] text-white rounded-md"
       >
         Add more items / Go Home
       </button>

@@ -13,7 +13,6 @@ import toast, { Toaster } from "react-hot-toast";
 import LoadingPage from "../loaders/LoadingPage";
 
 function ConfirmOrder() {
-  
   const searchParams = useSearchParams();
   const cart = useSelector((state) => state?.cart);
   console.log(cart);
@@ -26,97 +25,115 @@ function ConfirmOrder() {
   const table_number = searchParams.get("table");
   const [sgst, setsgst] = useState("");
   const [cgst, setcgst] = useState("");
-  function setLocalStorage(key, value, hours) {
-    const now = new Date();
-    const item = {
-      value: value,
-      expiry: now.getTime() + hours * 60 * 60 * 1000,
-    };
-    localStorage.setItem(key, JSON.stringify(item));
-  }
+  const [tax, settax] = useState("");
+  const [nooftables, setnooftables] = useState("")
+  const [savedcustomerid, setsavedcustomerid] = useState(null);
+  const [savedorderid, setsavedorderid] = useState(null);
+  const [savedrestaurantid, setsavedrestaurantid] = useState(null);
+
+
+  const checkvalidorderid = async (order_id) => {
+    try {
+      const resvalid = await axios.post("/api/fetchvalidorder", { order_id });
+      console.log(resvalid.data.valid);
+      if (resvalid.data.success) {
+        if (!resvalid.data.valid) {
+          localStorage.removeItem("orderId");
+          return null;
+        } else {
+          return order_id;
+        }
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  };
 
   useEffect(() => {
-    if (!cart || cart?.items?.length <= 0) {
-      toast.error("Cart is empty, please add items to proceed");
-      router.push(`/Menu?id=${restaurant_id}&table=${table_number}`);
-    }
-    const fetchtaxrates = async () => {
-      try {
-        const res = await axios.post(`/api/fetchrestaurantmenu`, {
-          restaurant_id,
-        });
-        console.log(res.data.data);
-        setcgst(res.data.data.cgst);
-        setsgst(res.data.data.sgst);
-      } catch (e) {
-        toast.error(
-          "Failed to fetch details. Please try again after refreshing."
-        );
+    const initialize = async () => {
+      if (!cart || cart?.items?.length <= 0) {
+        toast.error("Cart is empty, please add items to proceed");
+        router.push(`/Menu?id=${restaurant_id}&table=${table_number}`);
       }
+
+      const fetchtaxrates = async () => {
+        try {
+          const res = await axios.post(`/api/fetchrestaurantmenu`, {
+            restaurant_id,
+          });
+          console.log(res.data.data);
+          setcgst(res.data.data.cgst);
+          setsgst(res.data.data.sgst);
+          setnooftables(res.data.data.nooftables);
+          settax(
+            (
+              0.01 *
+              (parseFloat(res.data.data.cgst) + parseFloat(res.data.data.sgst))
+            ).toFixed(2)
+          );
+        } catch (e) {
+          toast.error(
+            "Failed to fetch details. Please try again after refreshing."
+          );
+        }
+      };
+
+      await fetchtaxrates();
+
+      const checkallids = async () => {
+        const customerId = localStorage.getItem("customerId");
+        const orderId = localStorage.getItem("orderId");
+        const restaurantId = localStorage.getItem("restaurantId");
+
+        const validOrderId = await checkvalidorderid(orderId);
+        setsavedcustomerid(customerId);
+        setsavedorderid(validOrderId);
+        setsavedrestaurantid(restaurantId);
+      };
+
+      await checkallids();
     };
-    fetchtaxrates();
+
+    initialize();
   }, []);
-
-  function getLocalStorage(key) {
-    const itemStr = localStorage.getItem(key);
-    if (!itemStr) {
-      return null;
-    }
-    const item = JSON.parse(itemStr);
-    const now = new Date();
-    if (now.getTime() > item.expiry) {
-      localStorage.removeItem(key);
-      return null;
-    }
-    return item.value;
-  }
-
-  let savedcustomerid;
-  let savedorderid;
-  let savedrestaurantid;
-  if (typeof window !== "undefined") {
-    savedcustomerid = localStorage.getItem("customerId");
-    savedorderid = getLocalStorage("orderId");
-    savedrestaurantid = localStorage.getItem("restaurantId");
-  } else {
-    return (
-      <div>
-        <LoadingPage />
-      </div>
-    );
-  }
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
   const handleplaceorder = async () => {
+    if(parseFloat(cart.totalPrice)>0 || cart.totalQuantity>0){
     if (savedrestaurantid != restaurant_id) {
       localStorage.removeItem("restaurantId");
       localStorage.removeItem("orderId");
     }
-    console.log(savedrestaurantid, savedorderid, savedcustomerid);
+
     const customerId =
       savedcustomerid == null || savedcustomerid == ""
         ? ("CUS_" + uuidv4()).toString()
         : savedcustomerid;
-    const nettax = (0.01*(
-      cart.totalPrice *
-      (parseFloat(cgst) + parseFloat(sgst))
-    )).toFixed(2);
+
+    const nettax = (
+      0.01 *
+      (cart.totalPrice * (parseFloat(cgst) + parseFloat(sgst)))
+    ).toFixed(2);
+    
     if (
       savedorderid == null ||
       savedrestaurantid == null ||
       savedorderid == "" ||
       savedrestaurantid == ""
     ) {
-      const orderId = ("ORD_" + uuidv4()).toString(); // Replace this with the actual customer ID logic if needed
-      localStorage.setItem("customerId", customerId); // Store customer ID in local storage
-      setLocalStorage("orderId", orderId, 4);
+      if(table_number>=0 && table_number<=parseInt(nooftables)){
+      const orderId = ("ORD_" + uuidv4()).toString();
+      localStorage.setItem("customerId", customerId);
+      localStorage.setItem("orderId", orderId);
       localStorage.setItem("restaurantId", restaurant_id);
 
       const orderDetails = {
-        customer_id: customerId, // Include customer ID in the order details
+        customer_id: customerId,
         order_id: orderId,
         restaurant_id: restaurant_id,
         table_number: table_number,
@@ -139,10 +156,9 @@ function ConfirmOrder() {
           2
         ),
       };
-      console.log(cgst,sgst,nettax);
+
       const res = await axios.post("api/createneworder", orderDetails);
 
-      // Redirect to the success page with order details
       if (res.data.success) {
         setTimeout(() => {
           dispatch(clearCart());
@@ -157,8 +173,13 @@ function ConfirmOrder() {
         setisbuttonloading(false);
         toast.error(res.data.error);
       }
+    }
+    else{
+      toast.error("Invalid Table Number. Please rescan the QR and try creating your order.")
+      setisbuttonloading(false)
+    }
     } else {
-      const orderId = savedorderid; // Replace this with the actual customer ID logic if needed
+      const orderId = savedorderid;
       const orderDetails = {
         order_id: orderId,
         new_order_items: {
@@ -175,12 +196,9 @@ function ConfirmOrder() {
         sgst: sgst,
         new_total_quantity: cart.totalQuantity,
         new_initial_bill: cart.totalPrice.toFixed(2),
-        // tax:(cart.totalPrice * 0.18).toFixed(2),
-        // total_bill: (cart.totalPrice * 1.18).toFixed(2),
       };
       const res = await axios.post("api/updateexistingorder", orderDetails);
 
-      // Redirect to the success page with order details
       if (res.data.success) {
         setTimeout(() => {
           dispatch(clearCart());
@@ -193,6 +211,11 @@ function ConfirmOrder() {
         toast.error(res.data.error);
       }
     }
+  }
+  else{
+    toast.error("Please select an item before placing an order")
+    setisbuttonloading(false)
+  }
   };
 
   if (!isHydrated) {
@@ -200,14 +223,14 @@ function ConfirmOrder() {
       <div>
         <LoadingPage />
       </div>
-    ); // You can replace this with a skeleton loader or a spinner
+    );
   }
 
   return (
     <div>
       <Toaster />
       <header>
-        <div className="h-16 bg-[#661268] flex justify-between px-4 items-center">
+        <div className="h-16 bg-[#441029] flex justify-between px-4 items-center">
           <div>
             <h1 className="text-xl font-semibold text-[#fff9ea]">Cart</h1>
             <p className="text-white text-sm">
@@ -224,7 +247,7 @@ function ConfirmOrder() {
       </header>
       <main className="min-h-[72vh] pb-32">
         {cart?.items?.map((item, i) => (
-          <ConfirmCard key={i} item={item} />
+          <ConfirmCard key={i} item={item} cart={cart}/>
         ))}
         <section className=" mt-10 mx-4">
           <h2 className="pl-1 text-sm italic font-light">
@@ -236,7 +259,7 @@ function ConfirmOrder() {
               rows="2"
               value={notes}
               onChange={(e) => setnotes(e.target.value)}
-              className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border-2 border-[#661268] "
+              className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border-2 border-[#441029] "
               placeholder="Write your thoughts here..."
             ></textarea>
           </div>
@@ -251,37 +274,41 @@ function ConfirmOrder() {
             </div>
             <div className="flex justify-between mb-2">
               <span className="font-semibold text-gray-700">
-                GST{" "}
+                Taxes{" "}
                 <sup className="rounded-full text-[#6C0345] ">
                   <InfoOutlinedIcon className="h-[1px] w-[1px]" />
                 </sup>
               </span>
               <span className="text-gray-700">
-                ₹ {(cart?.totalPrice * 0.18).toFixed(2)}
+                ₹ {parseFloat(cart?.totalPrice * tax).toFixed(2)}
               </span>
             </div>
             <div className="border-t border-gray-300 my-2"></div>
             <div className="flex justify-between mt-2">
               <span className="font-bold text-gray-700">Grand Total</span>
               <span className="font-bold text-gray-700">
-                ₹ {(cart?.totalPrice * 1.18).toFixed(2)}
+                ₹{" "}
+                {(
+                  parseFloat(cart?.totalPrice) +
+                  parseFloat(cart?.totalPrice * tax)
+                ).toFixed(2)}
               </span>
             </div>
           </div>
         </section>
       </main>
-      <footer className="h-[100px] fixed bottom-0 w-full bg-[#661268] p-4 text-white flex justify-center items-center">
+      <footer className="h-[100px] fixed bottom-0 w-full bg-[#441029] p-4 text-white flex justify-center items-center">
         <button
           onClick={() => {
             setisbuttonloading(true);
             handleplaceorder();
           }}
           disabled={isbuttonloading}
-          className="bg-white border-2 px-4 py-2 w-full rounded-lg text-[#661268] tracking-[0.5rem] font-extrabold relative"
+          className="bg-white border-2 px-4 py-2 w-full rounded-lg text-[#441029] tracking-[0.5rem] font-extrabold relative"
         >
           {isbuttonloading ? (
             <svg
-              className="animate-spin h-5 w-5 text-[#661268] absolute left-4"
+              className="animate-spin h-5 w-5 text-[#441029] absolute left-4"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"

@@ -13,17 +13,17 @@ function Team({data,addandremovewaiter}) {
   };
 
   return (
-    <div onClick={handleClick} className={`relative lg:w-64 w-[104px] p-[0.15rem] rounded-xl rounded-b-none borderbox ${isSelected ? 'selected scale-105' : ''}`}>
+    <div onClick={handleClick} className={`relative lg:w-32 w-[110px] p-[0.15rem] rounded-xl rounded-b-none borderbox ${isSelected ? 'selected scale-105' : ''}`}>
       {isSelected && (
-        <div className="bg-[#e093e1]  bg-opacity-50 p-1 rounded-full tick-mark-container text-white text-2xl">
-          <SiTicktick/>
+        <div className="bg-[#441029]  bg-opacity-90 p-1 rounded-full tick-mark-container text-white text-2xl">
+          <SiTicktick className="text-gray-100"/>
           {/* <img src="/src/app/assets/icons8-tick.gif" alt="Selected" className="tick-mark" /> */}
         </div>
       )}
       <div className="flex justify-center items-center pb-1">
         <Image
           src={data?.image}
-          className="rounded-xl rounded-b-none object-cover object-center"
+          className="rounded-xl rounded-b-none object-cover h-28 object-center"
           alt="itembanner"
           loading="lazy"
           width={100}
