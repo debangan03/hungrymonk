@@ -8,4 +8,5 @@ const conndb = (handler) => async (req, res) => {
     return handler(req, res);
   }
 };
+// comment
 export default conndb;
