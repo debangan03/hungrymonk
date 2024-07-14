@@ -9,7 +9,7 @@ import axios from "axios";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import Pageloader from "../loaders/pageloader";
+import LoadingPage from "../loaders/LoadingPage";
 
 function Billcomponent({name,order,qrcode}) {
 

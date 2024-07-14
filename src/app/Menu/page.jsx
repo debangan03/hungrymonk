@@ -1,11 +1,11 @@
 import React from 'react'
 import { Suspense } from "react";
 import FetchAllData from './FetchAllData';
-import Pageloader from '../loaders/pageloader';
+import LoadingPage from '../loaders/LoadingPage';
 
 function page() {
   return (
-    <Suspense fallback={<Pageloader/>}>
+    <Suspense fallback={<LoadingPage/>}>
       <FetchAllData/>
       </Suspense>
   )

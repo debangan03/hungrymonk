@@ -5,7 +5,7 @@ import Image from "next/image";
 import success from "../assets/success.png";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import Pageloader from "../loaders/pageloader";
+import LoadingPage from "../loaders/LoadingPage";
 import Footer from "../Menu/Footer";
 import OrderHeader from "./OrderHeader";
 function Order() {
@@ -71,7 +71,7 @@ function Order() {
   if (!orderDetails) {
     return (
       <div>
-        <Pageloader />
+        <LoadingPage />
       </div>
     );
   }

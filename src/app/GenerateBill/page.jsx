@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react'
 import Bill from './Bill'
-import Pageloader from '../loaders/pageloader'
+import LoadingPage from '../loaders/LoadingPage'
 
 function page() {
   return (
-    <Suspense fallback={<Pageloader/>}>
+    <Suspense fallback={<LoadingPage/>}>
       <Bill/>
       </Suspense>
   )

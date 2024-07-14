@@ -9,7 +9,7 @@ import BestSeller from "./BestSeller";
 import DisplayCategorywisemenu from "./DisplayCategorywisemenu";
 import Orderviewer from "./Orderviewer";
 import Footer from "./Footer";
-import Pageloader from "../loaders/pageloader";
+import LoadingPage from "../loaders/LoadingPage";
 
 function FetchAllData() {
   const [menuitems, setmenuitems] = useState();
@@ -32,7 +32,7 @@ function FetchAllData() {
   if (!menuitems)
     return (
       <>
-        <Pageloader />
+        <LoadingPage />
       </>
     );
 

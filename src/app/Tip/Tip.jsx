@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import PaymentLoader from "./PaymentLoader";
-import Pageloader from "../loaders/pageloader";
+import LoadingPage from "../loaders/LoadingPage";
 
 function Tip() {
   const [tipamount, settipamount] = useState("50");
@@ -118,7 +118,7 @@ function Tip() {
   if (!waiterdata || (waiterdata.length == 0 && !waiternotfound)) {
     return (
       <div>
-        <Pageloader />
+        <LoadingPage />
       </div>
     );
   }

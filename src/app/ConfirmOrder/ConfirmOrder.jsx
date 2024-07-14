@@ -10,9 +10,10 @@ import { clearCart } from "../redux/CartSlice";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import Pageloader from "../loaders/pageloader";
+import LoadingPage from "../loaders/LoadingPage";
 
 function ConfirmOrder() {
+  
   const searchParams = useSearchParams();
   const cart = useSelector((state) => state?.cart);
   console.log(cart);
@@ -80,7 +81,7 @@ function ConfirmOrder() {
   } else {
     return (
       <div>
-        <Pageloader />
+        <LoadingPage />
       </div>
     );
   }
@@ -197,7 +198,7 @@ function ConfirmOrder() {
   if (!isHydrated) {
     return (
       <div>
-        <Pageloader />
+        <LoadingPage />
       </div>
     ); // You can replace this with a skeleton loader or a spinner
   }

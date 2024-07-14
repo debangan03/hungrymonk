@@ -3,7 +3,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import Pageloader from "../loaders/pageloader";
+import LoadingPage from "../loaders/LoadingPage";
 import Footer from "../Menu/Footer";
 import BillHeader from "./BillHeader";
 import Billcomponent from "./Billcomponents";
@@ -95,7 +95,7 @@ function Bill() {
   if (!responsecome) {
     return (
       <div>
-        <Pageloader />
+        <LoadingPage />
       </div>
     );
   }
