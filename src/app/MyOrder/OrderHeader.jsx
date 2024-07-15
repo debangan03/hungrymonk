@@ -12,6 +12,7 @@ function OrderHeader({name,id,table}) {
     <Image
       alt="bgbanner"
       src={maskvector}
+      priority
       className="absolute top-0 left-0"
     />
     <h1 className="text-4xl pt-14 text-center font-semibold text-[#3d3d3d] ">

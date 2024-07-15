@@ -235,7 +235,10 @@ function ConfirmOrder() {
           <div>
             <h1 className="text-xl font-semibold text-[#fff9ea]">Cart</h1>
             <p className="text-white text-sm">
-              You pay: ₹ {(cart?.totalPrice * 1.18).toFixed(2)}
+              You pay: ₹ {(
+                  parseFloat(cart?.totalPrice) +
+                  parseFloat(cart?.totalPrice * tax)
+                ).toFixed(2)}
             </p>
           </div>
           <Link
