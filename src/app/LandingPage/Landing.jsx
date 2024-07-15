@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { CurrencyRupee, EditNote, History, ReceiptLong } from "@mui/icons-material";
 import LoadingPage from "../loaders/LoadingPage";
 import GenerateBillModal from "./ConfirmGenerateBill";
+import toast, { Toaster } from "react-hot-toast";
 
 
 const page = () => {
@@ -31,11 +32,18 @@ const page = () => {
   // }
 
   const billgenerationconfirmed=async()=>{
+    console.log(orderID)
+    if(orderID!="" || orderID!=null){
     const res=await axios.post('/api/generatebill',{order_id:orderID})
     if(res.data.success){
     router.push(
       `/GenerateBill?id=${id}&table=${table_number}&name=${name}`
     )
+  }
+  else{
+    setisOpen(false);
+    toast.error("You haven't placed any order yet.")
+  }
   }
   else{
     toast.error("Failed to generate bill. Please ask the waiter.")
@@ -75,6 +83,7 @@ const page = () => {
   }
   return (
     <>
+    <Toaster/>
       <div className="w-screen min-h-screen  relative bg-gradient-to-bl overflow-hidden  from-[#430123] to-[#5A0132]">
         <Image
           src={border}
@@ -104,7 +113,7 @@ const page = () => {
           <Link href={`/Menu?id=${id}&table=${table_number}&name=${name}`}  className="border-2 text-center poppins-semibold w-48 border-[#FFF9EA] z-50 bg-[#440129] px-4 rounded-full text-[#FFF9EA] py-3">
             <EditNote/> Place an Order
           </Link>
-          <div onClick={()=>{setisOpen(true)}}  className="border-2 text-center poppins-semibold w-48 border-[#FFF9EA] bg-[#440129] px-4 z-50 rounded-full text-[#FFF9EA] py-3">
+          <div onClick={()=>{setisOpen(true)}}  className="border-2 cursor-pointer text-center poppins-semibold w-48 border-[#FFF9EA] bg-[#440129] px-4 z-50 rounded-full text-[#FFF9EA] py-3">
             <ReceiptLong/> Generate my Bill
           </div>
           <Link href={`/GenerateBill?id=${id}&table=${table_number}&name=${name}`}  className="border-2 text-center poppins-semibold w-48 border-[#FFF9EA] bg-[#440129] px-4 z-50 rounded-full text-[#FFF9EA] py-3">
