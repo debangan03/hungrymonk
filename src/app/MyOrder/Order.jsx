@@ -37,7 +37,7 @@ function Order() {
   const checkvalidorderid = async (order_id) => {
     try {
       const resvalid = await axios.post("/api/fetchvalidorder", { order_id });
-      console.log(resvalid.data.valid);
+      //console.log(resvalid.data.valid);
       if (resvalid.data.success) {
         if (!resvalid.data.valid) {
           localStorage.removeItem("orderId");
@@ -65,6 +65,7 @@ function Order() {
               orderId: orderId,
             });
 
+            //
             console.log(res.data.data);
             if (!res.data.success) {
               toast.error(

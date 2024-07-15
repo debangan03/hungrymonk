@@ -32,7 +32,7 @@ function Tip() {
       setreviewlink(restaurantdata.data.data.reviewLink);
       
       const res = await axios.post("/api/fetchwaiters", { restaurant_id });
-      console.log(res.data);
+      //console.log(res.data);
       if (res.data.success && res.data.data.length > 0) {
         setwaiterdata(res.data.data);
       } else {
@@ -43,7 +43,7 @@ function Tip() {
   }, []);
 
   const addandremovewaiter = (waiter_id) => {
-    console.log(selectedwaiters);
+    //console.log(selectedwaiters);
     if (selectedwaiters.includes(waiter_id)) {
       setselectedwaiters(selectedwaiters.filter((id) => id !== waiter_id));
     } else {
@@ -58,7 +58,7 @@ function Tip() {
     });
     if (res.data.success) {
       const data = res.data.data;
-      console.log(data);
+      //console.log(data);
       if (data.id) {
         const initiateTransactionToDatabase = await axios.post(
           "/api/prepaymentDatabase",

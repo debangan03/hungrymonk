@@ -13,7 +13,7 @@ import LoadingPage from "../loaders/LoadingPage";
 
 function Billcomponent({name,order,qrcode}) {
 
-  console.log(order);
+  //console.log(order);
   const date = new Date(order[0].createdAt);
   const day = date.getDate().toString().padStart(2, "0");
   const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based

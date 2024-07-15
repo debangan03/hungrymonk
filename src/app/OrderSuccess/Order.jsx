@@ -25,11 +25,13 @@ function SuccessPage() {
       
       const getorder = async () => {
         
-        console.log(orderId);
+        //console.log(orderId);
         if (orderId) {
           const res = await axios.post("/api/fetchspecificorder", {
             orderId: orderId,
           });
+          //
+          
           console.log(res.data.data)
           setOrderDetails(res.data.data);
           if (!res.data.success) {

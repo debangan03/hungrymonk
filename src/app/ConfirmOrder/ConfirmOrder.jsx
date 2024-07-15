@@ -15,7 +15,7 @@ import LoadingPage from "../loaders/LoadingPage";
 function ConfirmOrder() {
   const searchParams = useSearchParams();
   const cart = useSelector((state) => state?.cart);
-  console.log(cart);
+  //console.log(cart);
   const [isHydrated, setIsHydrated] = useState(false);
   const [notes, setnotes] = useState("");
   const [isbuttonloading, setisbuttonloading] = useState(false);
@@ -35,6 +35,7 @@ function ConfirmOrder() {
   const checkvalidorderid = async (order_id) => {
     try {
       const resvalid = await axios.post("/api/fetchvalidorder", { order_id });
+      //
       console.log(resvalid.data.valid);
       if (resvalid.data.success) {
         if (!resvalid.data.valid) {
@@ -63,7 +64,7 @@ function ConfirmOrder() {
           const res = await axios.post(`/api/fetchrestaurantmenu`, {
             restaurant_id,
           });
-          console.log(res.data.data);
+          //console.log(res.data.data);
           setcgst(res.data.data.cgst);
           setsgst(res.data.data.sgst);
           setnooftables(res.data.data.nooftables);

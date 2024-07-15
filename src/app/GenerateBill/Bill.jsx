@@ -21,7 +21,7 @@ function Bill() {
   const checkvalidorderid = async (order_id) => {
     try {
       const resvalid = await axios.post("/api/fetchvalidorder", { order_id });
-      console.log(resvalid.data.valid);
+      //console.log(resvalid.data.valid);
       if (resvalid.data.success) {
         if (!resvalid.data.valid) {
           localStorage.removeItem("orderId");
@@ -50,7 +50,7 @@ function Bill() {
               orderId: orderId,
             });
             setresponsecome(true);
-            console.log(res.data);
+            //console.log(res.data);
             if (!res.data.success) {
               toast.error(
                 "Seems like you haven't yet ordered"
@@ -64,7 +64,8 @@ function Bill() {
                 const qrres = await axios.post("/api/getqrcodefortip", {
                   url: `${process.env.NEXT_PUBLIC_QR_URL}/Tip?id=${restaurant_id}&table=${table_number}`,
                 });
-                console.log(qrres.data);
+                //
+                //console.log(qrres.data);
                 setqrcode(qrres.data.qrCodeDataURL);
                 setOrderDetails(res.data.data);
             }

@@ -40,7 +40,7 @@ const handler = async (req, res) => {
       }
 
       // Save OrderFoodItems and collect their IDs
-      console.log()
+      //console.log()
       const orderFoodItemsPromises = order_items.map(async (item) => {
         const orderFoodItems = await Promise.all(item.items.map(async (foodItem) => {
           const newOrderFoodItem = new OrderFoodItems({

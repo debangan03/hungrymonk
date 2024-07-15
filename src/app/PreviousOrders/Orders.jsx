@@ -26,13 +26,13 @@ function Orders() {
       var customer_id = localStorage.getItem("customerId");
     }
     const fetchallorders = async () => {
-      console.log(customer_id, restaurant_id);
+      //console.log(customer_id, restaurant_id);
 
       const res = await axios.post("/api/fetchcustomerorders", {
         restaurant_id,
         customer_id,
       });
-      console.log(res.data);
+      //console.log(res.data);
       setresponsecome(true);
       if (!res.data.success) {
         setresponsefalse(true);

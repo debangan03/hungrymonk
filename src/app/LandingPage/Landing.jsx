@@ -46,14 +46,15 @@ const page = () => {
   useEffect(() => {
     const fetchdetails=async()=>{
       const res=await axios.post('/api/fetchrestaurantmenu',{restaurant_id:id})
-      console.log(res.data.data)
+      //console.log(res.data.data)
       if(res.data.success)
       {
         setname(res.data.data.restaurant_name)
         const order_id=localStorage.getItem('orderId');
-        console.log(order_id);
+        //console.log(order_id);
         if(order_id){
         const resvalid=await axios.post('/api/fetchvalidorder',{order_id})
+        //
         console.log(resvalid.data.valid);
         if(resvalid.data.success){
           if(!resvalid.data.valid){

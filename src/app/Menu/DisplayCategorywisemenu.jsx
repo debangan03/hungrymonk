@@ -10,11 +10,12 @@ import nonvegicon from '../assets/nonveg.png'
 
 
 function DisplayCategorywisemenu({menu}) {
-  console.log(menu)
+  //console.log(menu)
   const [food_items, setfood_items] = useState(menu)
   const [openAccordion, setOpenAccordion] = useState(null);
 
-  const handleToggle = (id) => {
+  const hand
+  leToggle = (id) => {
     setOpenAccordion(openAccordion === id ? null : id);
   };
 

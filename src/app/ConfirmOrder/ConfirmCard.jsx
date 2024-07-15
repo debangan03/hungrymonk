@@ -18,7 +18,8 @@ function ConfirmCard({ item }) {
     } else {
       dispatch(updateQuantity({ _id: item._id, quantity }));
     }
-    console.log(cart);
+    //
+    //console.log(cart);
   };
   const cartItem = cart.items.find((cartItem) => cartItem._id === item._id);
 

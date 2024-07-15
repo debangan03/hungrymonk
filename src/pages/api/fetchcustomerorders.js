@@ -20,7 +20,7 @@ const handler = async (req, res) => {
             }
           }
         });
-        console.log(orders)
+        //console.log(orders)
         if(orders.length > 0) {
       res.status(200).json({ success: true, data: orders });
         }
