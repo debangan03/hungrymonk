@@ -14,8 +14,7 @@ function DisplayCategorywisemenu({menu}) {
   const [food_items, setfood_items] = useState(menu)
   const [openAccordion, setOpenAccordion] = useState(null);
 
-  const hand
-  leToggle = (id) => {
+  const handleToggle = (id) => {
     setOpenAccordion(openAccordion === id ? null : id);
   };
 

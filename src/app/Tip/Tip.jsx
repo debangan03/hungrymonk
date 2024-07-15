@@ -181,7 +181,7 @@ function Tip() {
           className="px-2 pl-4 text-sm py-1 rounded-lg h-[3.4rem] w-10/12 border-2 border-[#441029] mr-2"
         />
       </div>
-      <div className="text-stone-800 mx-3 flex mb-4 justify-between rounded-lg py-4 px-2 drop-shadow-sm shadow-xl">
+      <div className="text-stone-800 mx-3 flex mb-4 justify-between rounded-lg py-4 px-2 drop-shadow-sm shadow-md border-2 border-[#fac64236] mt-2">
         <div>
           <p className=" text-[12px]">
             Like our Services ?<br />

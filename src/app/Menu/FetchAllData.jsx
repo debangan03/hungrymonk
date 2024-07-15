@@ -46,7 +46,7 @@ function FetchAllData() {
           table_number={table_number}
         />
         {/* <What_your_mood /> */}
-        <SomethingNew />
+        <SomethingNew menu={menuitems.food_items}/>
         {/* <BestSeller /> */}
         <DisplayCategorywisemenu menu={menuitems.food_items} />
         <Orderviewer

@@ -57,7 +57,6 @@ function SearchPage() {
             <Image
               alt="bgbanner"
               src={maskvector}
-              layout="fill"
               className="absolute top-0 left-0 object-cover"
             />
             <div className="flex justify-between items-center p-6">

@@ -13,6 +13,7 @@ function BillHeader({name,id,table}) {
       alt="bgbanner"
       src={maskvector}
       className="absolute top-0 left-0"
+      priority
     />
     <h1 className="text-4xl pt-14 text-center font-semibold text-[#3d3d3d] ">
           {name}
